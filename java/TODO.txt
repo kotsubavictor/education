@@ -1,0 +1,21 @@
+BigData
+- Spark
+
+Build Tool
+- Gradle
+
+???
+- Hazelcast
+- Hystrix
+
+Multithreading
+- Quasar
+
+JAVA 8
+Reactive Concepts
+
+Spring Boot
+
+In memory data grid (distributed cache)
+- Grid gain
+- Infinite span
