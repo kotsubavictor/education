@@ -19,3 +19,18 @@ Spring Boot
 In memory data grid (distributed cache)
 - Grid gain
 - Infinite span
+
+Spring
+Web
+- web socket
+- servlet
+- web
+- portlet
+Data access
+- jdbc
+- orm
+- jms
+- oxm
+- transaction
+AOP
+Test
