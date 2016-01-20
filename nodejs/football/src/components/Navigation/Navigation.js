@@ -2,11 +2,8 @@
 
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
-import styles from './Navigation.css';
-import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 
-@withStyles(styles)
 class Navigation extends Component {
 
   static propTypes = {
@@ -18,6 +15,7 @@ class Navigation extends Component {
       <div className={classNames(this.props.className, 'Navigation')} role="navigation">
         <a className="Navigation-link" href="/about" onClick={Link.handleClick}>About</a>
         <a className="Navigation-link" href="/contact" onClick={Link.handleClick}>Contact</a>
+        <a className="Navigation-link" href="/test" onClick={Link.handleClick}>Test</a>
         <span className="Navigation-spacer"> | </span>
         <a className="Navigation-link" href="/login" onClick={Link.handleClick}>Log in</a>
         <span className="Navigation-spacer">or</span>
