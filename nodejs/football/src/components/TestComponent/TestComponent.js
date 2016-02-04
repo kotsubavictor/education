@@ -8,15 +8,16 @@ class TestComponent extends React.Component {
 
     constructor() {
       super();
-      //this.state = {data:[]};
-      //TODO koviiv find a way to set up initial state
-      this.state = this.context.flux.getStore("TestStorage").getState()
     }
 
     static contextTypes = {
     onSetTitle: React.PropTypes.func.isRequired,
     flux: React.PropTypes.object.isRequired,
   };
+
+  componentWillMount() {
+    this.setState(this.context.flux.getStore("TestStorage").getState());
+  }
 
   componentDidMount() {
     this.context.flux.getStore("TestStorage").listen(this.onChange.bind(this));
