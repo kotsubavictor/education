@@ -7,6 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
+import TestDispatcher from "./core/TestDispatcher";
 
 const server = global.server = express();
 
@@ -26,11 +27,15 @@ server.get('*', async (req, res, next) => {
     let statusCode = 200;
     const data = { title: '', description: '', css: '', body: '' };
     const css = [];
+    const dispatcher = new TestDispatcher();
+    // TODO koviiv Create an instance of the dispatcher alt and pass it to the context
+
     const context = {
       onInsertCss: value => css.push(value),
       onSetTitle: value => data.title = value,
       onSetMeta: (key, value) => data[key] = value,
       onPageNotFound: () => statusCode = 404,
+      flux: dispatcher,
     };
 
     await Router.dispatch({ path: req.path, context }, (state, component) => {

@@ -20,6 +20,7 @@ function withContext(ComposedComponent) {
       onSetTitle: PropTypes.func.isRequired,
       onSetMeta: PropTypes.func.isRequired,
       onPageNotFound: PropTypes.func.isRequired,
+      flux: PropTypes.object.isRequired
     };
 
     getChildContext() {
@@ -29,6 +30,7 @@ function withContext(ComposedComponent) {
         onSetTitle: context.onSetTitle || emptyFunction,
         onSetMeta: context.onSetMeta || emptyFunction,
         onPageNotFound: context.onPageNotFound || emptyFunction,
+        flux: context.flux || {},
       };
     }
 

@@ -6,9 +6,13 @@ import FastClick from 'fastclick';
 import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
+import TestDispatcher from "./core/TestDispatcher";
 
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
+// TODO koviiv Create an instance of the dispatcher alt and pass it to the context
+const dispatcher = new TestDispatcher();
+
 const context = {
   onSetTitle: value => document.title = value,
   onSetMeta: (name, content) => {
@@ -25,6 +29,7 @@ const context = {
     meta.setAttribute('content', content);
     document.getElementsByTagName('head')[0].appendChild(meta);
   },
+  flux: dispatcher,
 };
 
 function render(state) {

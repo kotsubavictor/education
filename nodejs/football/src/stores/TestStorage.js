@@ -1,18 +1,18 @@
-import { ReduceStore } from 'flux/utils';
-import Immutable from 'immutable';
-import Dispatcher from '../core/Dispatcher.js';
+//import TestAction from "../actions/TestAction";
+import Alt from "alt";
 
-class TestStorage extends ReduceStore {
+class TestStorage {
 
-  getInitialState() : Immutable.OrderedMap<String, Number> {
-    return Immutable.OrderedMap();
+  constructor(alt: Alt) {
+    this.data = [];
+    this.bindActions(alt.getActions("TestAction"));
   }
 
-  reduce(state: Immutable.Map<String, Number>, action: Object) : Immutable.Map<String, Number> {
-    // todo handle action and update a store
-    return state;
+  addEntity(entity) {
+    this.data.push(entity);
   }
+
 }
 
-export default new TestStorage(Dispatcher);
+export default TestStorage;
 
