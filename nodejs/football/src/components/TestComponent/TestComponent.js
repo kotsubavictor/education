@@ -1,8 +1,6 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React from 'react';
-import TestDispatcher from './../../core/TestDispatcher';
-import TestAction from './../../actions/TestAction';
 
 class TestComponent extends React.Component {
 
@@ -16,23 +14,32 @@ class TestComponent extends React.Component {
   };
 
   componentWillMount() {
-    this.setState(this.context.flux.getStore("TestStorage").getState());
+    // TODO koviiv - how to specify a type of the variable. For instance, this.flux : TestDispatcher
+    this.flux = this.context.flux;
+    this.TestStorage = this.flux.getStore("TestStorage");
+    this.TestAction = this.flux.getActions("TestAction");
+    // TODO koviiv - move state to the constructor. Context is not available in the constructor.
+    this.setState(this.TestStorage.getState());
   }
 
   componentDidMount() {
-    this.context.flux.getStore("TestStorage").listen(this.onChange.bind(this));
+    this.TestStorage.listen(this.onChange);
+  }
+
+  componentWillUnmount() {
+    this.TestStorage.unlisten(this.onChange);
   }
 
   render() {
     const title = 'TestComponent';
     this.context.onSetTitle(title);
 
-    var data: Array = this.state.data;
     console.log("Storage values:");
-    console.log(this.context.flux.getStore("TestStorage").getState());
+    console.log(this.TestStorage.getState());
     console.log("Components values:");
     console.log(this.state);
 
+    var data: Array = this.state.data;
     var list = data.map((value, number)=> {
       return <div>{number})  {value}</div>
     });
@@ -42,24 +49,21 @@ class TestComponent extends React.Component {
         <div>
           <h1>{title}</h1>
             <div><input ref="koviiv" type="text" /></div>
-            <div><input type="button" value="Add" onClick={this.handleClick.bind(this)}/></div>
+            <div><input type="button" value="Add" onClick={this.handleClick}/></div>
             <div>{list}</div>
         </div>
       </div>
     );
   }
 
-  handleClick() {
+  handleClick = () => {
     var value = this.refs.koviiv.value;
     console.log("Input value:");
     console.log(value);
-    var flux: TestDispatcher =  this.context.flux;
-    var action: TestAction = flux.getActions("TestAction");
-    action.addEntity(value);
-
+    this.TestAction.addEntity(value);
   }
 
-  onChange(data) {
+  onChange = (data) => {
     this.setState(data);
   }
 }

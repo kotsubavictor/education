@@ -10,8 +10,11 @@ import TestDispatcher from "./core/TestDispatcher";
 
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
-// TODO koviiv Create an instance of the dispatcher alt and pass it to the context
 const dispatcher = new TestDispatcher();
+dispatcher.bootstrap(window.state);
+console.log("Bootstraping");
+console.log(window.state);
+console.log(dispatcher.getStore("TestStorage").getState());
 
 const context = {
   onSetTitle: value => document.title = value,

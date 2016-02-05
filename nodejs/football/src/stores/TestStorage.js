@@ -12,6 +12,12 @@ class TestStorage {
     this.data.push(entity);
   }
 
+  removeEntity(entity) {
+    var index = this.data.indexOf(removeEntity);
+    if (index != -1) {
+      this.data.splice(index, 1);
+    }
+  }
 }
 
 export default TestStorage;
