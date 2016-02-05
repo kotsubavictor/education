@@ -3,20 +3,22 @@
 import React from 'react';
 
 class TestComponent extends React.Component {
-    flux: TestDispatcher;
-    TestStorage: TestStorage;
-    TestAction: TestAction;
+  flux: TestDispatcher;
+  TestStorage: TestStorage;
+  TestAction: TestAction;
 
-    constructor() {
-      super();
-    }
+  constructor() {
+    super();
+  }
 
-    static contextTypes = {
+  static contextTypes = {
     onSetTitle: React.PropTypes.func.isRequired,
     flux: React.PropTypes.object.isRequired,
   };
 
   componentWillMount() {
+    //TODO koviiv - need a decorator for connecting stores to the component
+    //TODO koviiv - need an abstract component
     this.flux = this.context.flux;
     this.TestStorage = this.flux.getStore("TestStorage");
     this.TestAction = this.flux.getActions("TestAction");
@@ -36,21 +38,16 @@ class TestComponent extends React.Component {
     const title = 'TestComponent';
     this.context.onSetTitle(title);
 
-    console.log("Storage values:");
-    console.log(this.TestStorage.getState());
-    console.log("Components values:");
-    console.log(this.state);
-
     var data: Array = this.state.data;
     var list = data.map((value, number)=> {
-      return <div><input type="button" value="Remove" onClick={this.removeEntry(value)}/> {number})  {value}</div>
+      return <div key={number}><input type="button" value="Remove" onClick={this.removeEntry(value)}/> {number})  {value}</div>
     });
 
     return (
       <div className="TestComponent">
         <div>
           <h1>{title}</h1>
-            <div><input ref="koviiv" type="text" /></div>
+            <div><input ref="entry" type="text" /></div>
             <div><input type="button" value="Add" onClick={this.addEntry}/></div>
             <div>{list}</div>
         </div>
@@ -59,10 +56,7 @@ class TestComponent extends React.Component {
   }
 
   addEntry = () => {
-    var value = this.refs.koviiv.value;
-    console.log("Input value:");
-    console.log(value);
-    this.TestAction.addEntity(value);
+    this.TestAction.addEntity(this.refs.entry.value);
   }
 
   onChange = (data) => {

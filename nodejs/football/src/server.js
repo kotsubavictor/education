@@ -48,7 +48,7 @@ server.get('*', async (req, res, next) => {
       data.state = JSON.stringify(state.context.flux.takeSnapshot());
     });
 
-    console.log(data);
+    // TODO koviiv - why notFound page is requested for each call?
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(statusCode).send('<!doctype html>\n' + html);
