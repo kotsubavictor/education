@@ -13,7 +13,7 @@ class TestStorage {
   }
 
   removeEntity(entity) {
-    var index = this.data.indexOf(removeEntity);
+    var index = this.data.indexOf(entity);
     if (index != -1) {
       this.data.splice(index, 1);
     }

@@ -3,6 +3,9 @@
 import React from 'react';
 
 class TestComponent extends React.Component {
+    flux: TestDispatcher;
+    TestStorage: TestStorage;
+    TestAction: TestAction;
 
     constructor() {
       super();
@@ -14,7 +17,6 @@ class TestComponent extends React.Component {
   };
 
   componentWillMount() {
-    // TODO koviiv - how to specify a type of the variable. For instance, this.flux : TestDispatcher
     this.flux = this.context.flux;
     this.TestStorage = this.flux.getStore("TestStorage");
     this.TestAction = this.flux.getActions("TestAction");
@@ -41,7 +43,7 @@ class TestComponent extends React.Component {
 
     var data: Array = this.state.data;
     var list = data.map((value, number)=> {
-      return <div>{number})  {value}</div>
+      return <div><input type="button" value="Remove" onClick={this.removeEntry(value)}/> {number})  {value}</div>
     });
 
     return (
@@ -49,14 +51,14 @@ class TestComponent extends React.Component {
         <div>
           <h1>{title}</h1>
             <div><input ref="koviiv" type="text" /></div>
-            <div><input type="button" value="Add" onClick={this.handleClick}/></div>
+            <div><input type="button" value="Add" onClick={this.addEntry}/></div>
             <div>{list}</div>
         </div>
       </div>
     );
   }
 
-  handleClick = () => {
+  addEntry = () => {
     var value = this.refs.koviiv.value;
     console.log("Input value:");
     console.log(value);
@@ -65,6 +67,12 @@ class TestComponent extends React.Component {
 
   onChange = (data) => {
     this.setState(data);
+  }
+
+  removeEntry = (entry) => {
+    return () => {
+      this.TestAction.removeEntity(entry)
+    };
   }
 }
 
