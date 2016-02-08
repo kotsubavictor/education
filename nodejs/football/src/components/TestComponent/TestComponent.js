@@ -23,7 +23,9 @@ class TestComponent extends React.Component {
     this.TestStorage = this.flux.getStore("TestStorage");
     this.TestAction = this.flux.getActions("TestAction");
     // TODO koviiv - move state to the constructor. Context is not available in the constructor.
-    this.setState(this.TestStorage.getState());
+    // TODO koviiv - load data
+    // TODO koviiv - double check that shouldComponentUpdate uses shallowCheck - ref check for immutable objects
+    this.onChange();
   }
 
   componentDidMount() {
@@ -38,10 +40,12 @@ class TestComponent extends React.Component {
     const title = 'TestComponent';
     this.context.onSetTitle(title);
 
-    var data: Array = this.state.data;
-    var list = data.map((value, number)=> {
-      return <div key={number}><input type="button" value="Remove" onClick={this.removeEntry(value)}/> {number})  {value}</div>
-    });
+    var data: Immutable.Collection = this.state.data;
+    if (data) {
+      var list = data.map((value, number)=> {
+        return <div key={number}><input type="button" value="Remove" onClick={this.removeEntry(value)}/> {number})  {value}</div>
+      });
+    }
 
     return (
       <div className="TestComponent">
@@ -59,8 +63,11 @@ class TestComponent extends React.Component {
     this.TestAction.addEntity(this.refs.entry.value);
   }
 
-  onChange = (data) => {
-    this.setState(data);
+  onChange = () => {
+    var state = {
+      data: this.TestStorage.getState()
+    };
+    this.setState(state);
   }
 
   removeEntry = (entry) => {

@@ -33,7 +33,8 @@ server.get('*', async (req, res, next) => {
      * We need to add an abstraction for server router. It should load initial state.
      */
     const dispatcher = new TestDispatcher();
-    dispatcher.bootstrap(JSON.stringify({TestStorage:{data:[1]}}));
+    //dispatcher.bootstrap(JSON.stringify({TestStorage:{data:[1]}}));
+    dispatcher.bootstrap(JSON.stringify({TestStorage:[1]}));
     const context = {
       onInsertCss: value => css.push(value),
       onSetTitle: value => data.title = value,

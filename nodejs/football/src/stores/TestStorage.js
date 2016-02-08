@@ -1,22 +1,26 @@
-//import TestAction from "../actions/TestAction";
-import Alt from "alt";
-
-class TestStorage {
-
-  constructor(alt: Alt) {
-    this.data = [];
+import ImmutableStorage from './ImmutableStorage';
+import Immutable from 'immutable';
+class TestStorage extends ImmutableStorage {
+  constructor(alt: TestDispatcher) {
+    super(arguments);
+    this.state = Immutable.List();
     this.bindActions(alt.getActions("TestAction"));
   }
 
   addEntity(entity) {
-    this.data.push(entity);
+    this.setState(this.state.push(entity));
   }
 
   removeEntity(entity) {
-    var index = this.data.indexOf(entity);
-    if (index != -1) {
-      this.data.splice(index, 1);
+    var index = -1;
+    for (let i = 0; i < this.state.size; i++) {
+      if (this.state.get(i) == entity) {
+        index = i;
+        break;
+      }
     }
+
+    this.setState(this.state.delete(index));
   }
 }
 

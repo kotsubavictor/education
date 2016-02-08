@@ -116,7 +116,9 @@ const appConfig = merge({}, config, {
 
   // Choose a developer tool to enhance debugging
   // http://webpack.github.io/docs/configuration.html#devtool
-  devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
+  // TODO koviiv debug via webpack
+  //devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
+  devtool: 'source-map',
   plugins: [
     ...config.plugins,
     new webpack.DefinePlugin(GLOBALS),
