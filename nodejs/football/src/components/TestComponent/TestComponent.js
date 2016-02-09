@@ -1,8 +1,8 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
-
+import Component from './../Component';
 import React from 'react';
 
-class TestComponent extends React.Component {
+class TestComponent extends Component  {
   flux: TestDispatcher;
   TestStorage: TestStorage;
   TestAction: TestAction;
@@ -11,29 +11,12 @@ class TestComponent extends React.Component {
     super();
   }
 
-  static contextTypes = {
-    onSetTitle: React.PropTypes.func.isRequired,
-    flux: React.PropTypes.object.isRequired,
-  };
-
-  componentWillMount() {
-    //TODO koviiv - need a decorator for connecting stores to the component
-    //TODO koviiv - need an abstract component
-    this.flux = this.context.flux;
-    this.TestStorage = this.flux.getStore("TestStorage");
-    this.TestAction = this.flux.getActions("TestAction");
-    // TODO koviiv - move state to the constructor. Context is not available in the constructor.
-    // TODO koviiv - load data
-    // TODO koviiv - double check that shouldComponentUpdate uses shallowCheck - ref check for immutable objects
-    this.onChange();
+  getStores() : Array {
+    return ["TestStorage"];
   }
 
-  componentDidMount() {
-    this.TestStorage.listen(this.onChange);
-  }
-
-  componentWillUnmount() {
-    this.TestStorage.unlisten(this.onChange);
+  getActions() : Array {
+    return ["TestAction"];
   }
 
   render() {
