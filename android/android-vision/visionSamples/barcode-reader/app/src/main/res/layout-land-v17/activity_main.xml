@@ -27,6 +27,18 @@
         android:layout_marginTop="110dp"
         android:layout_alignEnd="@+id/status_message" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/client_coffee"
+        android:layout_below="@+id/status_message"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="140dp"
+        android:layout_alignRight="@+id/status_message"
+        android:layout_alignEnd="@+id/status_message" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

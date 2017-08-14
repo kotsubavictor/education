@@ -115,8 +115,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     clientId = barcode.displayValue;
 
                     statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(R.string.client + " : " + clientId);
-                    clientCoffee.setText(R.string.cups + " : " + coffeStorage.get(clientId));
+                    barcodeValue.setText(getString(R.string.client) + " : " + clientId);
+                    clientCoffee.setText(getString(R.string.cups) + " : " + coffeStorage.get(clientId));
 
                     Log.d(TAG, "Barcode read: " + clientId);
                 } else {
@@ -133,17 +133,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void eraseClientData() {
-        clientId = "";
+    private void eraseClientData() {
+        clientId = " ";
         barcodeValue.setText(clientId);
         clientCoffee.setText(clientId);
     }
 
-    public void updateClientData(int i) {
+    private void updateClientData(int i) {
         //                    todo: add methods for adding and removing number of coffee cups + attach buttons + atach text field
         int count =  coffeStorage.get(clientId) + i;
         coffeStorage.set(clientId, count);
-        clientCoffee.setText(R.string.cups + " : " + count);
+        clientCoffee.setText(getString(R.string.cups) + " : " + count);
     }
 }
 
