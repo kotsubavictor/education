@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -41,8 +42,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView barcodeValue;
     private TextView clientCoffee;
 
+    private Button addCup;
+    private Button removeCup;
+    private Button freeCup;
+    private Button finishCup;
+
     private CoffeStorage coffeStorage;
     private String clientId;
+
+    private static final String BLANK_CLIENT = "";
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -60,6 +68,46 @@ public class MainActivity extends Activity implements View.OnClickListener {
         autoFocus.setChecked(true);
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
 
+        addCup = (Button) findViewById(R.id.addCup);
+        addCup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coffeStorage.set(clientId, coffeStorage.get(clientId) + 1);
+                updateData();
+            }
+        });
+        removeCup = (Button) findViewById(R.id.removeCup);
+        removeCup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cupAmount = coffeStorage.get(clientId);
+                if (cupAmount > 0) {
+                    coffeStorage.set(clientId, cupAmount - 1);
+                    updateData();
+                }
+            }
+        });
+        freeCup = (Button) findViewById(R.id.freeCup);
+        freeCup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int cupAmount = coffeStorage.get(clientId);
+                if (cupAmount > 9) {
+                    coffeStorage.set(clientId, cupAmount - 10);
+                    updateData();
+                }
+            }
+        });
+        finishCup = (Button) findViewById(R.id.finishCup);
+        finishCup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clientId = BLANK_CLIENT;
+                updateData();
+            }
+        });
+
+        updateData();
         coffeStorage = new CoffeStorage(getPreferences(Context.MODE_PRIVATE));
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
@@ -109,20 +157,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
-                eraseClientData();
+                clientId = BLANK_CLIENT;
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     clientId = barcode.displayValue;
-
                     statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(getString(R.string.client) + " : " + clientId);
-                    clientCoffee.setText(getString(R.string.cups) + " : " + coffeStorage.get(clientId));
-
                     Log.d(TAG, "Barcode read: " + clientId);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
+                updateData();
             } else {
                 statusMessage.setText(String.format(getString(R.string.barcode_error),
                         CommonStatusCodes.getStatusCodeString(resultCode)));
@@ -133,17 +178,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void eraseClientData() {
-        clientId = " ";
-        barcodeValue.setText(clientId);
-        clientCoffee.setText(clientId);
-    }
+    private void updateData() {
+        int mode = View.INVISIBLE;
+        int cupAmount = 0;
+        if (clientId != null && !BLANK_CLIENT.equals(clientId)) {
+            cupAmount = coffeStorage.get(clientId);
+            mode = View.VISIBLE;
 
-    private void updateClientData(int i) {
-        //                    todo: add methods for adding and removing number of coffee cups + attach buttons + atach text field
-        int count =  coffeStorage.get(clientId) + i;
-        coffeStorage.set(clientId, count);
-        clientCoffee.setText(getString(R.string.cups) + " : " + count);
+            barcodeValue.setText(getString(R.string.client) + " : " + clientId);
+            clientCoffee.setText(getString(R.string.cups) + " : " + cupAmount);
+        }
+
+        barcodeValue.setVisibility(mode);
+        clientCoffee.setVisibility(mode);
+        addCup.setVisibility(mode);
+        removeCup.setVisibility(mode);
+        finishCup.setVisibility(mode);
+        if (View.INVISIBLE == mode || cupAmount > 9) {
+            freeCup.setVisibility(mode);
+        } else if (cupAmount < 10) {
+            freeCup.setVisibility(View.INVISIBLE);
+        }
     }
 }
 
