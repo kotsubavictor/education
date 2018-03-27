@@ -46,7 +46,6 @@ public class FilesMetadata {
                 .lookupPrincipalByName("root");
         Files.setOwner(file, owner);
 
-
         GroupPrincipal group =
                 file.getFileSystem().getUserPrincipalLookupService()
                         .lookupPrincipalByGroupName("root");
