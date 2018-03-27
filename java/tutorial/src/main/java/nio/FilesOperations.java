@@ -2,9 +2,7 @@ package nio;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 public class FilesOperations {
     public static void main(String[] args) throws IOException{
@@ -24,7 +22,18 @@ public class FilesOperations {
         System.out.println("Files.exists(file) " + Files.exists(file));
 
 
+        try {
+            Files.delete(fileToBeDeleted);
+        } catch (NoSuchFileException x) {
+            System.err.format("%s: no such" + " file or directory%n", fileToBeDeleted);
+        } catch (DirectoryNotEmptyException x) {
+            System.err.format("%s not empty%n", fileToBeDeleted);
+        } catch (IOException x) {
+            // File permission problems are caught here.
+            System.err.println(x);
+        }
 
+        Files.copy(file, fileToBeDeleted, StandardCopyOption.REPLACE_EXISTING);
 
         System.out.println("");
     }
