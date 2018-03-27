@@ -19,8 +19,7 @@ public class FilesOperations {
         System.out.println("Files.isExecutable(file) " + Files.isExecutable(file));
         System.out.println("Files.isSameFile(file, file1) " + Files.isSameFile(file, file1));
         System.out.println("file.equals(file1) " + file.equals(file1));
-        System.out.println("Files.exists(file) " + Files.newBufferedReader()exists(file));
-
+        System.out.println("Files.exists(file) " + Files.exists(file));
 
         System.out.println("");
     }
