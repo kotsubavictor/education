@@ -9,7 +9,7 @@ public class FilesOperations {
         Path file = Paths.get("./tutorial/src/main/resources/nio/usnumbers.txt");
         Path file1 = Paths.get("./tutorial/src/main/resources/nio/../nio/usnumbers.txt");
         Path fileToBeDeleted = Paths.get("./tutorial/src/main/resources/nio/tobedeleted.txt");
-
+        Path moveTo = Paths.get("./tutorial/src/main/resources/nio/tobedeletedMoved.txt");
 
         System.out.println("file " + file);
         System.out.println("file1 " + file1);
@@ -34,6 +34,8 @@ public class FilesOperations {
         }
 
         Files.copy(file, fileToBeDeleted, StandardCopyOption.REPLACE_EXISTING);
+
+        Files.move(fileToBeDeleted, moveTo, StandardCopyOption.REPLACE_EXISTING);
 
         System.out.println("");
     }
