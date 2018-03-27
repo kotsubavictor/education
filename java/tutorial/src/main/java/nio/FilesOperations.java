@@ -10,6 +10,8 @@ public class FilesOperations {
     public static void main(String[] args) throws IOException{
         Path file = Paths.get("./tutorial/src/main/resources/nio/usnumbers.txt");
         Path file1 = Paths.get("./tutorial/src/main/resources/nio/../nio/usnumbers.txt");
+        Path fileToBeDeleted = Paths.get("./tutorial/src/main/resources/nio/tobedeleted.txt");
+
 
         System.out.println("file " + file);
         System.out.println("file1 " + file1);
@@ -20,6 +22,9 @@ public class FilesOperations {
         System.out.println("Files.isSameFile(file, file1) " + Files.isSameFile(file, file1));
         System.out.println("file.equals(file1) " + file.equals(file1));
         System.out.println("Files.exists(file) " + Files.exists(file));
+
+
+
 
         System.out.println("");
     }
