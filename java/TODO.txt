@@ -38,3 +38,51 @@ Test
 Tutorial
 - Autoclosable
 - Volatile Happens-before concept
+
+
+
+
+
+JavaEE, Spring Boot, Spring Cache 3−4
+Spring IOC, AOP, TX, Security and Jersey.RxJava
+JAX-RS and JAX-WS
+hibernate
+jpa
+Docker, open stack, kubernetes;
+Enterprise Patterns;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NodeJs
+Front End: React, Redux
+Backend: Node.js, Express
+SQL/NoSQL databases
+AWS services
+WebSocket API
+Basecamp
+Webpack
+Mocha
+Typescript
+
+---
+ Koa, Passport, Restify, Underscore, Sequelize, Mongoose, Socket.IO.
+ React, VueJs, Angular,
+
+
+
+
+Website(Spring Boot, Spring MVC, React, Vue), BigData (Haddoop, Spark)
+NodeJs
