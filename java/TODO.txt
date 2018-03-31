@@ -86,3 +86,6 @@ Typescript
 
 Website(Spring Boot, Spring MVC, React, Vue), BigData (Haddoop, Spark)
 NodeJs
+
+
+Concurrent Programming in Java: Design Principles and Pattern (2nd Edition) by Doug Lea.
