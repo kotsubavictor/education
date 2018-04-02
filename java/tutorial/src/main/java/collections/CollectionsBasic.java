@@ -4,6 +4,16 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Collectors;
 
+
+/**
+ *
+ Interfaces	Hash table Implementations	Resizable array Implementations	Tree Implementations	Linked list Implementations	Hash table + Linked list Implementations
+ Set	HashSet	 	TreeSet	 	LinkedHashSet
+ List	 	ArrayList	 	LinkedList
+ Queue
+ Deque	 	ArrayDeque	 	LinkedList
+ Map	HashMap	 	TreeMap	 	LinkedHashMap
+ */
 public class CollectionsBasic {
     public static void main(String[] args) {
         List<String> list = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "5", "6", "7");
@@ -42,5 +52,8 @@ public class CollectionsBasic {
         copy.values().remove("66");
         System.out.println(copy);
         copy.entrySet();
+
+        ArrayList cons = set.stream().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        System.out.println(cons);
     }
 }
