@@ -14,10 +14,14 @@
         <property name="stockName" type="string">
             <column name="T1_STOCK_NAME" length="20" not-null="true" unique="true" />
         </property>
+        <!--inverse is required, because stock is not the owner of the relationship
+        it should not update the reference to stock_id for the entity dailyrecord
+        in case of updating/saving stock entity, daily record will not be affected.
+        relationship is stored in dailyRecord table. It is an owner-->
         <set name="stockDailyRecords" table="stock_daily_record"
              inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="T1_STOCK_ID" not-null="true" />
+                <column name="T2_STOCK_ID" not-null="true" />
             </key>
             <one-to-many class="StockDailyRecord" />
         </set>
