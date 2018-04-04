@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="StockDailyRecord" table="stock_daily_record"
+           catalog="hibernate">
+        <id name="recordId" type="java.lang.Integer">
+            <column name="T2_RECORD_ID" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="stock" class="Stock" fetch="select">
+            <column name="T2_STOCK_ID" not-null="true" />
+        </many-to-one>
+        <property name="priceOpen" type="java.lang.Float">
+            <column name="T2_PRICE_OPEN" precision="6" />
+        </property>
+        <property name="priceClose" type="java.lang.Float">
+            <column name="T2_PRICE_CLOSE" precision="6" />
+        </property>
+        <property name="priceChange" type="java.lang.Float">
+            <column name="T2_PRICE_CHANGE" precision="6" />
+        </property>
+        <property name="volume" type="java.lang.Long">
+            <column name="T2_VOLUME" />
+        </property>
+        <property name="date" type="date">
+            <column name="T2_DATE" length="10" not-null="true" unique="true" />
+        </property>
+    </class>
+</hibernate-mapping>
