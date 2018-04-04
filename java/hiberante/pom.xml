@@ -22,6 +22,7 @@
         <module>hibernate_many_to_many_association_annotation</module>
         <module>hibernate_inverse</module>
         <module>hibernate_logging</module>
+        <module>hibernate_connection_pool</module>
     </modules>
 
 </project>
