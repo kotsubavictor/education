@@ -55,5 +55,13 @@ public class CollectionsBasic {
 
         ArrayList cons = set.stream().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         System.out.println(cons);
+
+        System.out.println(list);
+        try {
+            list.add("dsf");
+        } catch (UnsupportedOperationException e) {
+            System.out.println("Arrays.asList is not modifiable collection. add/remove does not work");
+        }
+
     }
 }
