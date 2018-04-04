@@ -18,6 +18,8 @@
         <module>hibernate_one_to_one_association</module>
         <module>hibernate_one_to_one_association_annotation</module>
         <module>hibernate_one_to_many_association</module>
+        <module>hibernate_one_to_many_association_annotation</module>
+        <module>hibernate_many_to_many_association_annotation</module>
     </modules>
 
 </project>
