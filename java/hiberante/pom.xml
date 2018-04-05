@@ -26,6 +26,7 @@
         <module>hibernate_cascade</module>
         <module>hibernate_cascade_annotation</module>
         <module>hibernate_hql</module>
+        <module>hibernate_hql_parametrized</module>
     </modules>
 
 </project>
