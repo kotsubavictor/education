@@ -25,6 +25,7 @@
         <module>hibernate_connection_pool</module>
         <module>hibernate_cascade</module>
         <module>hibernate_cascade_annotation</module>
+        <module>hibernate_hql</module>
     </modules>
 
 </project>
