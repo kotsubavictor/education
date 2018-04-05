@@ -15,7 +15,7 @@
             <column name="T1_STOCK_NAME" length="20" not-null="true" unique="true" />
         </property>
         <set name="stockDailyRecords" table="stock_daily_record"
-             inverse="true" lazy="true" fetch="select">
+             inverse="true" lazy="true" fetch="select" cascade="save-update">
             <key>
                 <column name="T2_STOCK_ID" not-null="true" />
             </key>

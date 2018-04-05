@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="Stock" table="stock" catalog="hibernate">
+    <class name="Stock2" table="stock" catalog="hibernate">
         <id name="stockId" type="java.lang.Integer">
             <column name="T1_STOCK_ID" />
             <generator class="identity" />
@@ -15,7 +15,7 @@
             <column name="T1_STOCK_NAME" length="20" not-null="true" unique="true" />
         </property>
         <set name="stockDailyRecords" table="stock_daily_record"
-             inverse="true" lazy="true" fetch="select">
+             inverse="true" lazy="true" fetch="select" cascade="save-update, delete">
             <key>
                 <column name="T2_STOCK_ID" not-null="true" />
             </key>

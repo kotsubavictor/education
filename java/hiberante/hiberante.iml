@@ -3,7 +3,21 @@
   <component name="FacetManager">
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map />
+        <datasource-map>
+          <unit-entry name="hiberantexml:src:main:resources:hibernate.cfg.xml" />
+          <unit-entry name="hiberantexml:target:classes:hibernate.cfg.xml" />
+          <unit-entry name="hibernate.cfg.xml" />
+          <unit-entry name="hibernate_annotation:src:main:resources:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_annotation:target:classes:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_many_to_many_association:src:main:resources:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_many_to_many_association:target:classes:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_one_to_many_association_annotation:src:main:resources:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_one_to_many_association_annotation:target:classes:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_one_to_one_association:src:main:resources:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_one_to_one_association:target:classes:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_one_to_one_association_annotation:src:main:resources:hibernate.cfg.xml" />
+          <unit-entry name="hibernate_one_to_one_association_annotation:target:classes:hibernate.cfg.xml" />
+        </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hiberantexml/src/main/resources/hibernate.cfg.xml" />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hiberantexml/target/classes/hibernate.cfg.xml" />
