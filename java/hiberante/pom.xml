@@ -29,6 +29,7 @@
         <module>hibernate_hql_parametrized</module>
         <module>hibernate_criteria</module>
         <module>hibernate_native_sql</module>
+        <module>hibernate_named_queries</module>
     </modules>
 
 </project>

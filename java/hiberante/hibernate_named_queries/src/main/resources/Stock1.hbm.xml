@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="Stock1" table="stock" catalog="hibernate">
+        <id name="stockId" type="java.lang.Integer">
+            <column name="T1_STOCK_ID" />
+            <generator class="identity" />
+        </id>
+        <property name="stockCode" type="string">
+            <column name="T1_STOCK_CODE" length="10" not-null="true" unique="true" />
+        </property>
+        <property name="stockName" type="string">
+            <column name="T1_STOCK_NAME" length="20" not-null="true" unique="true" />
+        </property>
+        <set name="stockDailyRecords" table="stock_daily_record"
+             inverse="true" lazy="true" fetch="select" cascade="save-update">
+            <key>
+                <column name="T2_STOCK_ID" not-null="true" />
+            </key>
+            <one-to-many class="StockDailyRecord" />
+        </set>
+    </class>
+
+    <query name="findStockByStockCode">
+        <![CDATA[from Stock s where s.stockCode = :stockCode]]>
+    </query>
+</hibernate-mapping>
