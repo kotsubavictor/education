@@ -1,40 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="hibernate" name="Hibernate">
-      <configuration>
-        <datasource-map>
-          <unit-entry name="hiberantexml:src:main:resources:hibernate.cfg.xml" />
-          <unit-entry name="hiberantexml:target:classes:hibernate.cfg.xml" value="866b4249-7b41-4eed-af43-0b64670d4f3e" />
-          <unit-entry name="hibernate.cfg.xml" />
-          <unit-entry name="hibernate_annotation:src:main:resources:hibernate.cfg.xml" value="7b93765b-0f9e-4b12-ba9c-31ef1ea2076e" />
-          <unit-entry name="hibernate_annotation:target:classes:hibernate.cfg.xml" value="aa22ae50-8d63-4433-ad7d-6ecfad691cb7" />
-          <unit-entry name="hibernate_many_to_many_association:src:main:resources:hibernate.cfg.xml" value="b6752852-d55a-402e-b8fb-c3ac164aeac6" />
-          <unit-entry name="hibernate_many_to_many_association:target:classes:hibernate.cfg.xml" value="848fd826-7e31-42cf-9861-7a34d998f157" />
-          <unit-entry name="hibernate_one_to_many_association_annotation:src:main:resources:hibernate.cfg.xml" value="619c3c41-5f4a-4fed-b0f5-9ccc59727c47" />
-          <unit-entry name="hibernate_one_to_many_association_annotation:target:classes:hibernate.cfg.xml" value="79c49e6b-5948-4496-93be-74fd2308b1b3" />
-          <unit-entry name="hibernate_one_to_one_association:src:main:resources:hibernate.cfg.xml" value="27d6885e-41d6-40c6-850d-7fd3cd8522fe" />
-          <unit-entry name="hibernate_one_to_one_association:target:classes:hibernate.cfg.xml" value="33c1a59e-2a71-40d6-8fd9-5930070b866d" />
-          <unit-entry name="hibernate_one_to_one_association_annotation:src:main:resources:hibernate.cfg.xml" value="10e88d9d-46b9-4ec8-b587-30b913d1a46e" />
-          <unit-entry name="hibernate_one_to_one_association_annotation:target:classes:hibernate.cfg.xml" value="d17ac105-3d6b-4fcf-97da-026d0e1bc056" />
-        </datasource-map>
-        <naming-strategy-map />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hiberantexml/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hiberantexml/target/classes/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_annotation/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_annotation/target/classes/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_many_to_many_association/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_many_to_many_association/target/classes/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_many_to_many_association_annotation_extra/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_one_to_many_association_annotation/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_one_to_many_association_annotation/target/classes/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_one_to_one_association/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_one_to_one_association/target/classes/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_one_to_one_association_annotation/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/hibernate_one_to_one_association_annotation/target/classes/hibernate.cfg.xml" />
-      </configuration>
-    </facet>
-  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
