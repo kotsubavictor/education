@@ -28,6 +28,7 @@
         <module>hibernate_hql</module>
         <module>hibernate_hql_parametrized</module>
         <module>hibernate_criteria</module>
+        <module>hibernate_native_sql</module>
     </modules>
 
 </project>
