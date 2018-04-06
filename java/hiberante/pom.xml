@@ -31,6 +31,8 @@
         <module>hibernate_native_sql</module>
         <module>hibernate_named_queries</module>
         <module>hibernate_transactions</module>
+        <module>hibernate_data_filter</module>
+        <module>hibernate_interceptor</module>
     </modules>
 
 </project>
