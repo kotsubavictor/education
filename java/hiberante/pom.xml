@@ -34,6 +34,7 @@
         <module>hibernate_data_filter</module>
         <module>hibernate_interceptor</module>
         <module>hibernate_tweak_dynamic_insert</module>
+        <module>hibernate_tweak_dynamic_update</module>
     </modules>
 
 </project>
