@@ -35,6 +35,7 @@
         <module>hibernate_interceptor</module>
         <module>hibernate_tweak_dynamic_insert</module>
         <module>hibernate_tweak_dynamic_update</module>
+        <module>hibernate_tweak_mutable_example</module>
     </modules>
 
 </project>
