@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>hibernate_spring</module>
+        <module>hibernate_spring_xml</module>
     </modules>
 
     <artifactId>integrations</artifactId>
