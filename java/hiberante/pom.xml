@@ -36,6 +36,7 @@
         <module>hibernate_tweak_dynamic_insert</module>
         <module>hibernate_tweak_dynamic_update</module>
         <module>hibernate_tweak_mutable_example</module>
+        <module>hibernate_fetching_strategies</module>
     </modules>
 
 </project>

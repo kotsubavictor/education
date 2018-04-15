@@ -1,0 +1,133 @@
+Hibernate has few fetching strategies to optimize the Hibernate generated select statement,
+so that it can be as efficient as possible. The fetching strategy is declared in the mapping
+relationship to define how Hibernate fetch its related collections and entities.
+----------------------------------------------
+There are four fetching strategies
+
+1. fetch-“join” = Disable the lazy loading, always load all the collections and entities.
+2. fetch-“select” (default) = Lazy load all the collections and entities.
+3. batch-size=”N” = Fetching up to ‘N’ collections or entities, *Not record*.
+4. fetch-“subselect” = Group its collection into a sub select statement.
+
+----------------------------------------------
+batch-size=”10″ or @BatchSize(size = 10)
+This ‘batch size’ fetching strategy is always misunderstanding by many Hibernate developers.
+Let see the *misunderstand* concept here…
+
+The batch-size fetching strategy is not define how many records inside in the collections are loaded.
+Instead, it defines how many collections should be loaded.
+
+
+
+Another example
+Let see another example, you want to print out all the stock records and its related stock daily records (collections) one by one.
+
+List<Stock> list = session.createQuery("from Stock").list();
+
+for(Stock stock : list){
+
+    Set sets = stock.getStockDailyRecords();
+
+    for ( Iterator iter = sets.iterator();iter.hasNext(); ) {
+            StockDailyRecord sdr = (StockDailyRecord) iter.next();
+            System.out.println(sdr.getDailyRecordId());
+            System.out.println(sdr.getDate());
+    }
+}
+Copy
+No batch-size fetching strategy
+Output
+
+Hibernate:
+    select ...
+    from mkyong.stock stock0_
+
+Hibernate:
+    select ...
+    from mkyong.stock_daily_record stockdaily0_
+    where stockdaily0_.STOCK_ID=?
+
+Hibernate:
+    select ...
+    from mkyong.stock_daily_record stockdaily0_
+    where stockdaily0_.STOCK_ID=?
+
+Keep repeat the select statements....depend how many stock records in your table.
+Copy
+If you have 20 stock records in the database, the Hibernate’s default fetching strategies will generate 20+1 select
+statements and hit the database.
+
+1. Select statement to retrieve all the Stock records.
+2. Select its related collection
+3. Select its related collection
+4. Select its related collection
+….
+21. Select its related collection
+
+The generated queries are not efficient and caused a serious performance issue.
+
+Enabled the batch-size=’10’ fetching strategy
+Let see another example with batch-size=’10’ is enabled.
+Output
+
+Hibernate:
+    select ...
+    from mkyong.stock stock0_
+
+Hibernate:
+    select ...
+    from mkyong.stock_daily_record stockdaily0_
+    where
+        stockdaily0_.STOCK_ID in (
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        )
+Copy
+Now, Hibernate will per-fetch the collections, with a select *in* statement. If you have 20 stock records,
+it will generate 3 select statements.
+
+1. Select statement to retrieve all the Stock records.
+2. Select In statement to per-fetch its related collections (10 collections a time)
+3. Select In statement to per-fetch its related collections (next 10 collections a time)
+
+With batch-size enabled, it simplify the select statements from 21 select statements to 3 select statements.
+
+----------------------------------------------
+
+4. fetch=”subselect” or @Fetch(FetchMode.SUBSELECT)
+This fetching strategy is enable all its related collection in a sub select statement. Let see the same query again..
+
+List<Stock> list = session.createQuery("from Stock").list();
+
+for(Stock stock : list){
+
+    Set sets = stock.getStockDailyRecords();
+
+    for ( Iterator iter = sets.iterator();iter.hasNext(); ) {
+            StockDailyRecord sdr = (StockDailyRecord) iter.next();
+            System.out.println(sdr.getDailyRecordId());
+            System.out.println(sdr.getDate());
+    }
+}
+Copy
+Output
+
+Hibernate:
+    select ...
+    from mkyong.stock stock0_
+
+Hibernate:
+    select ...
+    from
+        mkyong.stock_daily_record stockdaily0_
+    where
+        stockdaily0_.STOCK_ID in (
+            select
+                stock0_.STOCK_ID
+            from
+                mkyong.stock stock0_
+        )
+Copy
+With “subselect” enabled, it will create two select statements.
+
+1. Select statement to retrieve all the Stock records.
+2. Select all its related collections in a sub select query.
