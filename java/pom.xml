@@ -12,6 +12,7 @@
         <module>spi</module>
         <module>tutorial</module>
         <module>hiberante</module>
+        <module>integrations</module>
     </modules>
 
     <properties>
