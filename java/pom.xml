@@ -13,6 +13,7 @@
         <module>tutorial</module>
         <module>hiberante</module>
         <module>integrations</module>
+        <module>spring_boot</module>
     </modules>
 
     <properties>
