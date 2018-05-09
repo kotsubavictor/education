@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring_boot_timeleaf</module>
+        <module>spring_boot_jsp</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
