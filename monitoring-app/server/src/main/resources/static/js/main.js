@@ -2,6 +2,9 @@ $(window).ready(function () {
     window.dataSize = 30;
     window.rigSize = 4;
     window.chart = new Morris.Line(generateChartData());
+
+
+
 });
 
 function generateChartData() {
@@ -22,6 +25,7 @@ function generateChartData() {
         result.ykeys.push(rigName);
         result.labels.push(rigName);
     }
+
 
     for (var recordNumber = 0; recordNumber < dataSize; recordNumber++) {
         record = {};
@@ -76,7 +80,8 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+            var equipment = JSON.parse(greeting.body)
+            showGreeting(equipment.name + equipment.temperature);
         });
     });
 }
@@ -105,4 +110,16 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
 });
+
+
+function a() {
+    $.ajax({
+        url: '/script.cgi',
+        type: 'DELETE',
+        success: function(result) {
+            // Do something with the result
+        }
+    });
+}
+
 

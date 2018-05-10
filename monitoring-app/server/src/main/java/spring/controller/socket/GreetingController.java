@@ -1,19 +1,20 @@
-package spring.controller;
+package spring.controller.socket;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
-import spring.data.Greeting;
+import spring.WebAppConst;
+import spring.data.Equipment;
 import spring.data.HelloMessage;
 
 @Controller
 public class GreetingController {
 
     @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Greeting greeting(HelloMessage message) throws Exception {
+    @SendTo(WebAppConst.WEBSOCKET_TOPIC_EQUIPMENT)
+    public Equipment greeting(HelloMessage message) throws Exception {
         Thread.sleep(1000); // simulated delay
-        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+        return new Equipment("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!", 22);
     }
 }
