@@ -8,10 +8,10 @@ import java.util.Map;
 public class MockUtils {
     private static final Collection<Equipment> EQUIPMENT = new ArrayList<>(4);
     static {
-        EQUIPMENT.add(new Equipment("xmrig1", 21));
-        EQUIPMENT.add(new Equipment("xmrig2", 22));
-        EQUIPMENT.add(new Equipment("xmrig3", 23));
-        EQUIPMENT.add(new Equipment("xmrig4", 24));
+        EQUIPMENT.add(new Equipment("xmrig1", 21f));
+        EQUIPMENT.add(new Equipment("xmrig2", 22f));
+        EQUIPMENT.add(new Equipment("xmrig3", 23f));
+        EQUIPMENT.add(new Equipment("xmrig4", 24f));
     }
 
     private static final long TIMING_STEP = 5000;

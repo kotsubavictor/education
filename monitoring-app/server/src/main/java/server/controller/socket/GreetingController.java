@@ -15,6 +15,6 @@ public class GreetingController {
     @SendTo(WebAppConst.WEBSOCKET_TOPIC_EQUIPMENT)
     public Equipment greeting(HelloMessage message) throws Exception {
         Thread.sleep(1000); // simulated delay
-        return new Equipment("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!", 22);
+        return new Equipment("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!", 22f);
     }
 }

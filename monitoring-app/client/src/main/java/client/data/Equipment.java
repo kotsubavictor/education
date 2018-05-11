@@ -3,12 +3,12 @@ package client.data;
 
 public class Equipment {
     private String name;
-    private long temperature;
+    private Float temperature;
 
     public Equipment() {
     }
 
-    public Equipment(String name, long temp) {
+    public Equipment(String name, Float temp) {
         this.name = name;
         this.temperature = temp;
     }
@@ -17,11 +17,11 @@ public class Equipment {
         return name;
     }
 
-    public long getTemperature() {
+    public Float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(long temperature) {
+    public void setTemperature(Float temperature) {
         this.temperature = temperature;
     }
 

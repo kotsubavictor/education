@@ -1,5 +1,6 @@
 package client.scheduler;
 
+import client.data.Equipment;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -8,14 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import client.data.Equipment;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
+import java.util.Arrays;
 
 @Component
 public class EquipmentMonitor {
@@ -36,8 +36,7 @@ public class EquipmentMonitor {
 
     @PostConstruct
     public void setUp() throws URISyntaxException {
-        System.out.println(new File(ClassLoader.getSystemResource(script).toURI()).getAbsolutePath());
-        commandline = new CommandLine(new File(ClassLoader.getSystemResource(script).toURI()));
+        commandline = new CommandLine(new File(script));
     }
 
     @Scheduled(fixedRate = 5000)
@@ -52,13 +51,13 @@ public class EquipmentMonitor {
 
     private Equipment getEquipmentInfo() throws IOException, NumberFormatException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
         DefaultExecutor exec = new DefaultExecutor();
         PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream);
         exec.setStreamHandler(streamHandler);
         exec.execute(commandline);
-
-        return new Equipment(name, Long.parseLong(outputStream.toString().trim()));
+        Float temperature = Arrays.asList(outputStream.toString().split("\n"))
+                .stream().map(Float::parseFloat).max(Float::compare).get();
+        return new Equipment(name, temperature);
     }
 
 }
