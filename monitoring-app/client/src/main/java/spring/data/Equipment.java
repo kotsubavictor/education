@@ -1,9 +1,6 @@
 package spring.data;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Equipment {
     private String name;
     private long temperature;

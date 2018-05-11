@@ -1,11 +1,10 @@
 package spring.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.WebAppConst;
 import spring.data.Equipment;
 import spring.data.MockUtils;
@@ -19,7 +18,7 @@ public class EquipmentController {
     @Autowired
     private SimpMessagingTemplate webSocket;
 
-    @RequestMapping(produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public Collection<Equipment> list() {
         return MockUtils.getEquipment();
     }
@@ -29,10 +28,16 @@ public class EquipmentController {
         return MockUtils.getEquipment(name);
     }
 
-    @RequestMapping(value = "/{name}/temperature/{temperature}", method = RequestMethod.PUT)
-    public void updateTemperature(@PathVariable String name, @PathVariable Long temperature) {
-        Equipment equipment = MockUtils.getEquipment(name);
-        equipment.setTemperature(temperature);
+    @RequestMapping(value = "/{name}", method = RequestMethod.PUT)
+    public ResponseEntity update(@RequestBody Equipment tmp) {
+        Equipment equipment = MockUtils.getEquipment(tmp.getName());
+        if (equipment == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        equipment.setTemperature(tmp.getTemperature());
         webSocket.convertAndSend(WebAppConst.WEBSOCKET_TOPIC_EQUIPMENT, equipment);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

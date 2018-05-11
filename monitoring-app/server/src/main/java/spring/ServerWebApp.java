@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CurrentWebApp {
+public class ServerWebApp {
     public static void main(String[] args) {
-        SpringApplication.run(CurrentWebApp.class, args);
+        SpringApplication.run(ServerWebApp.class, args);
     }
 }
