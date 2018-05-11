@@ -1,13 +1,13 @@
-package spring.controller.rest;
+package server.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import spring.WebAppConst;
-import spring.data.Equipment;
-import spring.data.MockUtils;
+import server.WebAppConst;
+import server.data.Equipment;
+import server.data.MockUtils;
 
 import java.util.Collection;
 

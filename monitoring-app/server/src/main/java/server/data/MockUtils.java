@@ -1,4 +1,4 @@
-package spring.data;
+package server.data;
 
 import java.util.ArrayList;
 import java.util.Collection;

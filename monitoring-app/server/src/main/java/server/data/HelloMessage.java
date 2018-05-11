@@ -1,4 +1,4 @@
-package spring.data;
+package server.data;
 
 public class HelloMessage {
 

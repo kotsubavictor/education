@@ -1,4 +1,4 @@
-package spring.data;
+package client.data;
 
 
 public class Equipment {
