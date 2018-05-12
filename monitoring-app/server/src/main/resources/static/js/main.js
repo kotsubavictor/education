@@ -1,3 +1,8 @@
+//---------------------------------------------------------------
+// Chart
+var model = new EquipmentModel();
+
+
 $(window).ready(function () {
     window.dataSize = 30;
     window.rigSize = 4;
@@ -45,81 +50,24 @@ function updateChart() {
     window.chart.setData(mock.data);
 }
 
-
-
-
-
-
-
-
-
 //---------------------------------------------------------------
+// Init EquipmentPush via WebSocket
+var equipmentPushClient = new EquipmentPushClient();
+equipmentPushClient.connect();
+equipmentPushClient.subscribe(function (equipment) {
+    model.update(equipment);
+});
 
-
-
-
-
-var stompClient = null;
-
-function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
-    $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#conversation").show();
-    }
-    else {
-        $("#conversation").hide();
-    }
-    $("#greetings").html("");
-}
-
-function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
-            var equipment = JSON.parse(greeting.body)
-            showGreeting(equipment.name + equipment.temperature);
-        });
-    });
-}
-
-function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-    setConnected(false);
-    console.log("Disconnected");
-}
-
-function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
-}
-
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+var sendName  = function () {
+    //todo: just for test
+    var equipment = {'name': $("#name").val(), 'temperature': $("#temperature").val()};
+    console.log(equipment);
+    equipmentPushClient.save(equipment);
 }
 
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
 });
-
-
-function a() {
-    $.ajax({
-        url: '/script.cgi',
-        type: 'DELETE',
-        success: function(result) {
-            // Do something with the result
-        }
-    });
-}
-
-

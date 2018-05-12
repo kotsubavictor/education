@@ -13,7 +13,7 @@ public class Equipment {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "TEMP")
+    @Column(name = "TEMPERATURE")
     private Float temperature;
 
     public Equipment() {
