@@ -1,3 +1,8 @@
+//---------------------------------------------------------------
+// Chart
+var model = new EquipmentModel();
+
+
 $(window).ready(function () {
     window.dataSize = 30;
     window.rigSize = 4;
@@ -45,31 +50,19 @@ function updateChart() {
     window.chart.setData(mock.data);
 }
 
-
-
-
-
-
-
-
-
 //---------------------------------------------------------------
+// Init EquipmentPush via WebSocket
 var equipmentPushClient = new EquipmentPushClient();
 equipmentPushClient.connect();
 equipmentPushClient.subscribe(function (equipment) {
-    showGreeting(equipment.name + ' : ' + equipment.temperature);
+    model.update(equipment);
 });
 
-function sendName() {
+var sendName  = function () {
     //todo: just for test
-    var tmp = Math.floor(30 + Math.random() * 20);
     var equipment = {'name': $("#name").val(), 'temperature': $("#temperature").val()};
     console.log(equipment);
     equipmentPushClient.save(equipment);
-}
-
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
 
 $(function () {
@@ -78,5 +71,3 @@ $(function () {
     });
     $( "#send" ).click(function() { sendName(); });
 });
-
-
