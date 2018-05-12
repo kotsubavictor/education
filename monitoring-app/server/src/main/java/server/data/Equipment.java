@@ -1,6 +1,8 @@
 package server.data;
 
-public class Equipment {
+import java.io.Serializable;
+
+public class Equipment implements Serializable {
     private String name;
     private Float temperature;
 
@@ -12,16 +14,28 @@ public class Equipment {
         this.temperature = temp;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setTemperature(Float temperature) {
+        this.temperature = temperature;
     }
 
     public Float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Float temperature) {
-        this.temperature = temperature;
+    @Override
+    public String toString() {
+        return "Equipment{" +
+                "name='" + name + '\'' +
+                ", temperature=" + temperature +
+                '}';
     }
 
     public static Equipment from(server.domain.Equipment equipment) {

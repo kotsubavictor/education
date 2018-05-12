@@ -38,4 +38,5 @@ public class EquipmentController {
         equipmentRepository.save(new server.domain.Equipment(tmp.getName(), tmp.getTemperature()));
         webSocket.convertAndSend(WebAppConst.WEBSOCKET_TOPIC_EQUIPMENT, tmp);
     }
+
 }
