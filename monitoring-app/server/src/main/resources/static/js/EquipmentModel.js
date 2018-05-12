@@ -1,8 +1,8 @@
-var EquipmentModel = function () {
+var EquipmentModel = function (size) {
     // xmrig1 : {name: 'xmrig1', temperature: 22, updated: true, lost : 0}
     var that = this;
     var equipments = {};
-    var records = new CyclicArray(100);
+    var records = new CyclicArray(size);
     var equipmentNames = [];
 
     var onAddedCallback = function() {};

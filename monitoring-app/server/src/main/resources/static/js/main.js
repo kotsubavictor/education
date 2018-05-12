@@ -1,17 +1,26 @@
 //---------------------------------------------------------------
 // Chart
 var chart = null;
-var model = new EquipmentModel();
+var model = new EquipmentModel(200);
 
 model.onAdded(function () {
     console.log('Added');
     var names = model.getEquipmentNames();
     var data = {
         element: 'koviiv',
-        data: model.getRecords(), /* {timing: 21312312, xmrig1: 12, xmrig2: 22} */
+        data: model.getRecords(),
         xkey: 'timing',
         ykeys: names,
-        labels: names
+        labels: names,
+        pointSize: 0,
+        ymin: 40,
+        ymax: 90,
+        xLabels: '5sec',
+        goals: [70, 75],
+        goalLineColors: ['#FFFF00', '#ff0000'],
+        goalStrokeWidth: 4,
+        eventStrokeWidth: 1,
+        hideHover: 'auto'
     };
 
     $("#koviiv").html('');
