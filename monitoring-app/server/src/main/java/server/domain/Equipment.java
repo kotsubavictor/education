@@ -1,7 +1,19 @@
-package server.data;
+package server.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "EQUIPMENT")
 public class Equipment {
+
+    @Id
+    @Column(name = "NAME")
     private String name;
+
+    @Column(name = "TEMPERATURE")
     private Float temperature;
 
     public Equipment() {
@@ -22,9 +34,5 @@ public class Equipment {
 
     public void setTemperature(Float temperature) {
         this.temperature = temperature;
-    }
-
-    public static Equipment from(server.domain.Equipment equipment) {
-        return new Equipment(equipment.getName(), equipment.getTemperature());
     }
 }
