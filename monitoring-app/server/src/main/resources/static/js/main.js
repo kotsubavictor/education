@@ -33,6 +33,42 @@ model.onTick(function () {
     chart.setData(model.getRecords());
 });
 
+
+
+var tempChart = null;
+var tempModel = new TemperatureModel(288);
+
+tempModel.onAdded(function (records) {
+    var names = tempModel.getEquipmentNames();
+    var data = {
+        element: 'koviiv1',
+        data: records,
+        xkey: 'timing',
+        ykeys: names,
+        labels: names,
+        pointSize: 0,
+        ymin: 40,
+        ymax: 90,
+        xLabels: '5sec',
+        goals: [70, 75],
+        goalLineColors: ['#FFFF00', '#ff0000'],
+        goalStrokeWidth: 4,
+        eventStrokeWidth: 1,
+        hideHover: 'auto'
+    };
+
+    $("#koviiv1").html('');
+    tempChart = new Morris.Line(data);
+});
+
+tempModel.onUpdated(function (records) {
+    tempChart.setData(records);
+});
+
+$.get('/temperatures', function (data) {
+    tempModel.update(data);
+});
+
 //---------------------------------------------------------------
 // Init PushClient via WebSocket
 var pushClient = new PushClient();
@@ -42,6 +78,6 @@ pushClient.subscribeEquipment(function (equipment) {
 });
 
 pushClient.subscribeTemperature(function (temperature) {
-   // todo: handle temperature update
-   console.log(temperature);
+    console.log(temperature);
+    tempModel.update([temperature]);
 });

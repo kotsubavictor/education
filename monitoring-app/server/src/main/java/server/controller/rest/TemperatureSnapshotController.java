@@ -2,6 +2,7 @@ package server.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import server.data.TemperatureSnapshotData;
 import server.domain.TemperatureSnapshot;
@@ -19,7 +20,7 @@ public class TemperatureSnapshotController {
     @Autowired
     private TemperatureSnapshotRepository temperatureSnapshotRepository;
 
-    @RequestMapping
+    @RequestMapping(method = RequestMethod.GET)
     public Collection<TemperatureSnapshotData> list() {
         Map<java.util.Date, Collection<TemperatureSnapshot>> data = new TreeMap<>();
         List<TemperatureSnapshotData> result = new LinkedList<>();

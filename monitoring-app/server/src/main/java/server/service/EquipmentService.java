@@ -10,6 +10,7 @@ import server.domain.TemperatureSnapshot;
 import server.repository.EquipmentRepository;
 import server.repository.TemperatureSnapshotRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -32,6 +33,13 @@ public class EquipmentService {
 
     private Map<String, Collection<Float>> snapshots = new ConcurrentHashMap<>();
 
+    @PostConstruct
+    public void initDefaultSnapshots() {
+        equipmentRepository.findAll().forEach(
+                equipment -> snapshots.put(equipment.getName(), new LinkedList<>())
+        );
+    }
+
     @Scheduled(fixedRate = 300000)
     public void saveSnapshots() {
         final Date date = new Date();
@@ -39,21 +47,26 @@ public class EquipmentService {
         snapshots.entrySet().forEach(entry -> {
             TemperatureSnapshot snapshot = new TemperatureSnapshot(entry.getKey(), date);
             snapshot.setMin(100f);
-            snapshot.setMax(-100f);
+            snapshot.setMax(0f);
+            snapshot.setAverage(0f);
             Collection<Float> temperatures = entry.getValue();
-            float sum = 0;
 
-            for (Float temperature : temperatures) {
-                snapshot.setMin(Math.min(snapshot.getMin(), temperature));
-                snapshot.setMax(Math.max(snapshot.getMax(), temperature));
-                sum += temperature;
+            if (!temperatures.isEmpty()) {
+                float sum = 0;
+                for (Float temperature : temperatures) {
+                    snapshot.setMin(Math.min(snapshot.getMin(), temperature));
+                    snapshot.setMax(Math.max(snapshot.getMax(), temperature));
+                    sum += temperature;
+                }
+
+                snapshot.setAverage(sum / temperatures.size());
+                temperatureSnapshotRepository.save(snapshot);
             }
 
-            snapshot.setAverage(sum / temperatures.size());
-            temperatureSnapshotRepository.save(snapshot);
             data.add(snapshot);
         });
-        snapshots.clear();
+
+        initDefaultSnapshots();
 
         if (!data.isEmpty()) {
             pushService.sendTemperatureSnapshot(

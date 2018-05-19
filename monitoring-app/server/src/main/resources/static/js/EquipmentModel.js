@@ -7,7 +7,7 @@ var EquipmentModel = function (size) {
 
     var onAddedCallback = function() {};
     var onUpdatedCallback = onAddedCallback;
-    var onTickCallback = onAddedCallback();
+    var onTickCallback = onAddedCallback;
 
     this.getRecords = function () {
         return records.toArray();
