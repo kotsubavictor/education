@@ -1,5 +1,5 @@
 //---------------------------------------------------------------
-// Chart
+// Model + Chart
 var chart = null;
 var model = new EquipmentModel(200);
 
@@ -41,18 +41,4 @@ var equipmentPushClient = new EquipmentPushClient();
 equipmentPushClient.connect();
 equipmentPushClient.subscribe(function (equipment) {
     model.update(equipment);
-});
-
-var sendName  = function () {
-    //todo: just for test
-    var equipment = {'name': $("#name").val(), 'temperature': $("#temperature").val()};
-    console.log(equipment);
-    equipmentPushClient.save(equipment);
-}
-
-$(function () {
-    $("form").on('submit', function (e) {
-        e.preventDefault();
-    });
-    $( "#send" ).click(function() { sendName(); });
 });
