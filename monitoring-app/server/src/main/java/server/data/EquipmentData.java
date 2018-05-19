@@ -2,14 +2,14 @@ package server.data;
 
 import java.io.Serializable;
 
-public class Equipment implements Serializable {
+public class EquipmentData implements Serializable {
     private String name;
     private Float temperature;
 
-    public Equipment() {
+    public EquipmentData() {
     }
 
-    public Equipment(String name, Float temp) {
+    public EquipmentData(String name, Float temp) {
         this.name = name;
         this.temperature = temp;
     }
@@ -38,7 +38,7 @@ public class Equipment implements Serializable {
                 '}';
     }
 
-    public static Equipment from(server.domain.Equipment equipment) {
-        return new Equipment(equipment.getName(), equipment.getTemperature());
+    public static EquipmentData from(server.domain.Equipment equipment) {
+        return new EquipmentData(equipment.getName(), equipment.getTemperature());
     }
 }

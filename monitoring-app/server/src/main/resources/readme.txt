@@ -22,3 +22,24 @@ Enter keystore password:
  [no]: yes
 
  123456
+
+
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:57:06', 'xmrig1', 18.9333, 60, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:52:06', 'xmrig3', 18.7797, 67, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:52:06', 'xmrig4', 18.1017, 59, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:52:06', 'xmrig1', 18.2, 60, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:57:06', 'xmrig3', 18.65, 67, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:57:06', 'xmrig4', 18.0167, 59, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:46:58', 'xmrig3', 18.6667, 66, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:46:58', 'xmrig4', 18, 59, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-18 12:46:58', 'xmrig1', 18.3333, 60, 0);
+
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:57:06', 'xmrig1', 17.9333, 60, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:52:06', 'xmrig3', 17.7797, 67, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:52:06', 'xmrig4', 17.1017, 59, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:52:06', 'xmrig1', 17.2, 60, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:57:06', 'xmrig3', 17.65, 67, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:57:06', 'xmrig4', 17.0167, 59, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:46:58', 'xmrig3', 17.6667, 66, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:46:58', 'xmrig4', 17, 59, 0);
+ INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:46:58', 'xmrig1', 17.3333, 60, 0);

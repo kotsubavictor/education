@@ -4,7 +4,6 @@ var chart = null;
 var model = new EquipmentModel(200);
 
 model.onAdded(function () {
-    console.log('Added');
     var names = model.getEquipmentNames();
     var data = {
         element: 'koviiv',
@@ -28,7 +27,6 @@ model.onAdded(function () {
 });
 
 model.onUpdated(function () {
-    console.log('Updated');
 });
 
 model.onTick(function () {
@@ -36,9 +34,14 @@ model.onTick(function () {
 });
 
 //---------------------------------------------------------------
-// Init EquipmentPush via WebSocket
-var equipmentPushClient = new EquipmentPushClient();
-equipmentPushClient.connect();
-equipmentPushClient.subscribe(function (equipment) {
+// Init PushClient via WebSocket
+var pushClient = new PushClient();
+pushClient.connect();
+pushClient.subscribeEquipment(function (equipment) {
     model.update(equipment);
+});
+
+pushClient.subscribeTemperature(function (temperature) {
+   // todo: handle temperature update
+   console.log(temperature);
 });

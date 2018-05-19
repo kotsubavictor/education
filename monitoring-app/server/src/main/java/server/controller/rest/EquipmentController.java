@@ -2,7 +2,7 @@ package server.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import server.data.Equipment;
+import server.data.EquipmentData;
 import server.service.EquipmentService;
 import server.service.PushService;
 
@@ -19,17 +19,17 @@ public class EquipmentController {
     private EquipmentService equipmentService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public Collection<Equipment> list() {
+    public Collection<EquipmentData> list() {
         return equipmentService.list();
     }
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = "application/json")
-    public Equipment list(@PathVariable String name) {
+    public EquipmentData list(@PathVariable String name) {
         return equipmentService.list(name);
     }
 
     @RequestMapping(value = "/{name}", method = RequestMethod.PUT)
-    public void update(@RequestBody Equipment equipment) {
+    public void update(@RequestBody EquipmentData equipment) {
         equipmentService.save(equipment);
         pushService.sendEquipment(equipment);
     }

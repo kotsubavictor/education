@@ -3,7 +3,7 @@ package server.controller.socket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import server.data.Equipment;
+import server.data.EquipmentData;
 import server.service.EquipmentService;
 import server.service.PushService;
 
@@ -17,7 +17,7 @@ public class EquipmentPushController {
     private PushService pushService;
 
     @MessageMapping("/equipments")
-    public void save(Equipment equipment) {
+    public void save(EquipmentData equipment) {
         equipmentService.save(equipment);
         pushService.sendEquipment(equipment);
     }
