@@ -25,15 +25,17 @@
 </head>
 <body>
 
-<p th:inline="text">
-    You are logged as: <b>[[${#httpServletRequest.remoteUser}]]</b>
-    (<a href="/logout">logout</a>)
-</p>
+<!--<p th:inline="text">-->
+    <!--You are logged as: <b>[[${#httpServletRequest.remoteUser}]]</b>-->
+    <!--(<a href="/logout">logout</a>)-->
+<!--</p>-->
 
-<div id="koviiv" class="container" style="height: 400px;">
-</div>
+<div class="container">
+    <div id="rt_chart" class="container" style="height: 400px;">
+    </div>
 
-<div id="koviiv1" class="container" style="height: 400px;">
+    <div id="delay_chart" class="container" style="height: 400px;">
+    </div>
 </div>
 
 </body>

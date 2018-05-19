@@ -1,7 +1,10 @@
 package server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import server.data.EquipmentData;
@@ -11,16 +14,15 @@ import server.repository.EquipmentRepository;
 import server.repository.TemperatureSnapshotRepository;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
 @Scope(value = "singleton")
 public class EquipmentService {
+
+    private static final String ALERT_MESSAGE = "ALERT - TEMPERATURE";
 
     @Autowired
     private EquipmentRepository equipmentRepository;
@@ -31,13 +33,27 @@ public class EquipmentService {
     @Autowired
     private PushService pushService;
 
+    @Autowired
+    private JavaMailSender emailSender;
+
+    @Value("${server.mail.to}")
+    private String mailTo;
+
+    @Value("${server.alert.high.temp}")
+    private int alertHightTemp;
+
+    @Value("${server.alert.low.temp}")
+    private int alertLowtTemp;
+
     private Map<String, Collection<Float>> snapshots = new ConcurrentHashMap<>();
+    private Map<String, String> alerts = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void initDefaultSnapshots() {
         equipmentRepository.findAll().forEach(
                 equipment -> snapshots.put(equipment.getName(), new LinkedList<>())
         );
+        alerts.clear();
     }
 
     @Scheduled(fixedRate = 300000)
@@ -62,7 +78,7 @@ public class EquipmentService {
                 snapshot.setAverage(sum / temperatures.size());
                 temperatureSnapshotRepository.save(snapshot);
             }
-
+            validateTemperature(snapshot.getSnapshotPK().getName(), snapshot.getMax());
             data.add(snapshot);
         });
 
@@ -82,6 +98,7 @@ public class EquipmentService {
     public void save(EquipmentData equipment) {
         equipmentRepository.save(new server.domain.Equipment(equipment.getName(), equipment.getTemperature()));
         takeSnapshot(equipment);
+        validateTemperature(equipment.getName(), equipment.getTemperature());
     }
 
     public Collection<EquipmentData> list() {
@@ -101,5 +118,16 @@ public class EquipmentService {
             snapshots.put(equipment.getName(), snapshot);
         }
         snapshot.add(equipment.getTemperature());
+    }
+
+    private void validateTemperature(String name, Float temperature) {
+        if ((temperature > alertHightTemp || temperature < alertLowtTemp) && !alerts.containsKey(name)) {
+            alerts.put(name, name);
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(mailTo);
+            message.setSubject(ALERT_MESSAGE);
+            message.setText(name.toUpperCase() + ": " + temperature);
+            emailSender.send(message);
+        }
     }
 }

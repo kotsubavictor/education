@@ -61,6 +61,13 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+
+        <!-- EMail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!--<dependency>-->
             <!--<groupId>com.h2database</groupId>-->
             <!--<artifactId>h2</artifactId>-->

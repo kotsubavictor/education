@@ -6,7 +6,7 @@ var model = new EquipmentModel(200);
 model.onAdded(function () {
     var names = model.getEquipmentNames();
     var data = {
-        element: 'koviiv',
+        element: 'rt_chart',
         data: model.getRecords(),
         xkey: 'timing',
         ykeys: names,
@@ -22,7 +22,7 @@ model.onAdded(function () {
         hideHover: 'auto'
     };
 
-    $("#koviiv").html('');
+    $("#rt_chart").html('');
     chart = new Morris.Line(data);
 });
 
@@ -41,7 +41,7 @@ var tempModel = new TemperatureModel(288);
 tempModel.onAdded(function (records) {
     var names = tempModel.getEquipmentNames();
     var data = {
-        element: 'koviiv1',
+        element: 'delay_chart',
         data: records,
         xkey: 'timing',
         ykeys: names,
@@ -57,7 +57,7 @@ tempModel.onAdded(function (records) {
         hideHover: 'auto'
     };
 
-    $("#koviiv1").html('');
+    $("#delay_chart").html('');
     tempChart = new Morris.Line(data);
 });
 
