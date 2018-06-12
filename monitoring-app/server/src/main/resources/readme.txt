@@ -1,5 +1,10 @@
 java -jar target/spr...
 
+0) Mosquitto MQTT SERVER
+sudo apt-get install mosquitto mosquitto-clients
+mosquitto_sub -h localhost -t test
+mosquitto_pub -h localhost -t test -m "hello world"
+
 
 1)
  keytool -genkey -alias tomcat -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650

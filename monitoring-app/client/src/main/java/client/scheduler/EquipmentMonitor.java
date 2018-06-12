@@ -1,6 +1,6 @@
 package client.scheduler;
 
-import client.data.Equipment;
+import client.data.EquipmentData;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -42,14 +42,14 @@ public class EquipmentMonitor {
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         try {
-            Equipment equipment = getEquipmentInfo();
+            EquipmentData equipment = getEquipmentInfo();
             restTemplate.put(endpoint, equipment, equipment.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Equipment getEquipmentInfo() throws IOException, NumberFormatException {
+    private EquipmentData getEquipmentInfo() throws IOException, NumberFormatException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DefaultExecutor exec = new DefaultExecutor();
         PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream);
@@ -57,7 +57,7 @@ public class EquipmentMonitor {
         exec.execute(commandline);
         Float temperature = Arrays.asList(outputStream.toString().split("\n"))
                 .stream().map(Float::parseFloat).max(Float::compare).get();
-        return new Equipment(name, temperature);
+        return new EquipmentData(name, true, temperature, null);
     }
 
 }

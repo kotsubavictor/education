@@ -14,15 +14,23 @@ public class Equipment {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "ONLINE")
+    private Boolean online;
+
     @Column(name = "TEMPERATURE")
     private Float temperature;
+
+    @Column(name = "HUMIDITY")
+    private Float humidity;
 
     public Equipment() {
     }
 
-    public Equipment(String name, Float temp) {
+    public Equipment(String name, Boolean online, Float temperature, Float humidity) {
         this.name = name;
-        this.temperature = temp;
+        this.online = online;
+        this.temperature = temperature;
+        this.humidity = humidity;
     }
 
     @Override
@@ -52,5 +60,21 @@ public class Equipment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
+    }
+
+    public Float getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(Float humidity) {
+        this.humidity = humidity;
     }
 }

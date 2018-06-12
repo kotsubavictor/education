@@ -3,8 +3,10 @@ package server.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import server.data.EquipmentData;
-import server.service.EquipmentService;
+import server.service.AlertService;
+import server.service.EquipmentDataService;
 import server.service.PushService;
+import server.service.SnapshotService;
 
 import java.util.Collection;
 
@@ -16,7 +18,13 @@ public class EquipmentController {
     private PushService pushService;
 
     @Autowired
-    private EquipmentService equipmentService;
+    private EquipmentDataService equipmentService;
+
+    @Autowired
+    private AlertService alertService;
+
+    @Autowired
+    private SnapshotService snapshotService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public Collection<EquipmentData> list() {
@@ -31,6 +39,8 @@ public class EquipmentController {
     @RequestMapping(value = "/{name}", method = RequestMethod.PUT)
     public void update(@RequestBody EquipmentData equipment) {
         equipmentService.save(equipment);
+        snapshotService.record(equipment);
+        alertService.validate(equipment);
         pushService.sendEquipment(equipment);
     }
 
