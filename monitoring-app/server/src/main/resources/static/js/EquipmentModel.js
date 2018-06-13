@@ -9,6 +9,10 @@ var EquipmentModel = function (size) {
     var onUpdatedCallback = onAddedCallback;
     var onTickCallback = onAddedCallback;
 
+    this.getData = function () {
+        return equipments;
+    }
+
     this.getRecords = function () {
         return records.toArray();
     };
@@ -34,13 +38,17 @@ var EquipmentModel = function (size) {
         var callback = onUpdatedCallback;
         if(equipment === undefined) {
             equipment = $.extend({}, data);
+            equipments[equipment.name] = equipment;
             equipmentNames.push(equipment.name);
             callback = onAddedCallback;
+        } else {
+            equipment.temperature = data.temperature;
+            equipment.online = data.online;
+            equipment.humidity = data.humidity;
         }
         equipment.updated = true;
         equipment.lost = 0;
-        equipment.temperature = data.temperature;
-        equipments[equipment.name] = equipment;
+
         callback(equipment);
     };
 
@@ -57,6 +65,8 @@ var EquipmentModel = function (size) {
                 if (equipment.lost == 2) {
                     equipment.lost = 0;
                     equipment.temperature = 0;
+                    equipment.online = false;
+                    equipment.humidity = 0;
                 }
             }
             record[equipment.name] = equipment.temperature;
