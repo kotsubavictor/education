@@ -30,32 +30,51 @@
 <!--</p>-->
 
 <div class="container">
-    <table id="equipment" class="table table-hover table-striped">
-        <thead>
+    <div>
+        <h1>Equipments</h1>
+        <table id="equipment" class="table table-hover table-striped">
+            <thead>
             <tr>
                 <th>ID</th>
                 <th>ONLINE</th>
                 <th>Temperature</th>
                 <th>Humidity</th>
             </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
-
-<div class="container">
-
-
-
-    <div id="rt_chart" class="container" style="height: 400px;">
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h1>Rele Status</h1>
+        <table id="rele" class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Power</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
-    <div id="delay_chart" class="container" style="height: 400px;">
+    <div>
+        <h1>Realtime Temperature</h1>
+        <div id="rt_chart" class="container" style="height: 400px;">
+    </div>
+
+    </div>
+
+    <div>
+        <h1>Snapshot Temperature</h1>
+        <div id="delay_chart" class="container" style="height: 400px;">
+    </div>
+
     </div>
 </div>
 
-    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
 
 </body>
 </html>

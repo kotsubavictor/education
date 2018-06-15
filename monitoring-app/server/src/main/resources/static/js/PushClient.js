@@ -4,6 +4,7 @@ var PushClient = function () {
     var equipmentCallback = function () {
     };
     var temperatureCallback = equipmentCallback;
+    var releCallback = equipmentCallback;
 
     this.connect = function () {
         var socket = new SockJS('/socket');
@@ -12,13 +13,18 @@ var PushClient = function () {
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/equipments', function (response) {
-                var equipment = JSON.parse(response.body)
+                var equipment = JSON.parse(response.body);
                 equipmentCallback(equipment);
             });
 
             stompClient.subscribe('/topic/temperatures', function (response) {
-                var temperatureSnapshot = JSON.parse(response.body)
+                var temperatureSnapshot = JSON.parse(response.body);
                 temperatureCallback(temperatureSnapshot);
+            });
+
+            stompClient.subscribe('/topic/rele', function (response) {
+                var rele = JSON.parse(response.body);
+                releCallback(rele);
             });
         });
     };
@@ -36,6 +42,10 @@ var PushClient = function () {
 
     this.subscribeTemperature  = function(tmp) {
         temperatureCallback = tmp;
+    };
+
+    this.subscribeRele  = function(tmp) {
+        releCallback = tmp;
     };
 
     this.send = function (path, data) {

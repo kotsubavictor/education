@@ -41,7 +41,7 @@ public class EquipmentController {
         equipmentService.save(equipment);
         snapshotService.record(equipment);
         alertService.validate(equipment);
-        pushService.sendEquipment(equipment);
+        pushService.send(equipment);
     }
 
 }

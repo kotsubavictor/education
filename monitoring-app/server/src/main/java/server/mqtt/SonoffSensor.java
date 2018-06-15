@@ -10,16 +10,15 @@ public class SonoffSensor {
     @SerializedName("AM2301")
     private AM2301Sensor am2301;
 
+    @SerializedName("DS18B20")
+    private DS18B20Sensor ds18b20;
+
     @SerializedName("TempUnit")
     private String tempUnit;
 
-    public class AM2301Sensor {
-
+    public class Sensor {
         @SerializedName("Temperature")
         private Float temperature;
-
-        @SerializedName("Humidity")
-        private Float humidity;
 
         public Float getTemperature() {
             return temperature;
@@ -28,6 +27,22 @@ public class SonoffSensor {
         public void setTemperature(Float temperature) {
             this.temperature = temperature;
         }
+
+        @Override
+        public String toString() {
+            return "Sensor{" +
+                    "temperature=" + temperature +
+                    '}';
+        }
+    }
+
+    public class DS18B20Sensor extends Sensor {
+    }
+
+    public class AM2301Sensor extends Sensor {
+
+        @SerializedName("Humidity")
+        private Float humidity;
 
         public Float getHumidity() {
             return humidity;
@@ -40,7 +55,7 @@ public class SonoffSensor {
         @Override
         public String toString() {
             return "AM2301Sensor{" +
-                    "temperature=" + temperature +
+                    "temperature=" + getTemperature() +
                     ", humidity=" + humidity +
                     '}';
         }
@@ -71,11 +86,25 @@ public class SonoffSensor {
     }
 
     public Float getTemperature() {
-        return am2301.getTemperature();
+        Float temperature = 0F;
+
+        if (am2301 != null) {
+            temperature = am2301.getTemperature();
+        } else if (ds18b20 != null) {
+            temperature = ds18b20.getTemperature();
+        }
+
+        return temperature;
     }
 
     public Float getHumidity() {
-        return am2301.getHumidity();
+        Float humidity = 0F;
+
+        if (am2301 != null) {
+            humidity = am2301.getHumidity();
+        }
+
+        return humidity;
     }
 
     @Override
@@ -83,6 +112,7 @@ public class SonoffSensor {
         return "SonoffSensor{" +
                 "time='" + time + '\'' +
                 ", am2301=" + am2301 +
+                ", ds18b20=" + ds18b20 +
                 ", tempUnit='" + tempUnit + '\'' +
                 '}';
     }

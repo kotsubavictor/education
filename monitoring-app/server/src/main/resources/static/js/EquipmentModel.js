@@ -8,6 +8,11 @@ var EquipmentModel = function (size) {
     var onAddedCallback = function() {};
     var onUpdatedCallback = onAddedCallback;
     var onTickCallback = onAddedCallback;
+    var creationDate = Date.now();
+
+    for (var i = 0; i < size; i++) {
+        records.push({timing: Date.now() - 5000 * (size - i)});
+    }
 
     this.getData = function () {
         return equipments;
@@ -62,7 +67,7 @@ var EquipmentModel = function (size) {
                 equipment.lost = 0;
             } else {
                 equipment.lost++;
-                if (equipment.lost == 2) {
+                if (equipment.lost == 3) {
                     equipment.lost = 0;
                     equipment.temperature = 0;
                     equipment.online = false;

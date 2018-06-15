@@ -60,7 +60,7 @@ public class SnapshotService {
         List<TemperatureSnapshotData.Temperature> temperatures;
         if (!data.isEmpty()) {
             temperatures = data.stream().map(TemperatureSnapshotData.Temperature::from).collect(Collectors.toList());
-            pushService.sendTemperatureSnapshot(new TemperatureSnapshotData(date.getTime(), temperatures));
+            pushService.send(new TemperatureSnapshotData(date.getTime(), temperatures));
         } else {
             temperatures = Collections.emptyList();
         }
