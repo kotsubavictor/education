@@ -3,6 +3,7 @@ package server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import server.data.ConditionData;
 import server.data.EquipmentData;
 import server.data.ReleData;
 import server.data.TemperatureSnapshotData;
@@ -10,9 +11,10 @@ import server.data.TemperatureSnapshotData;
 @Component
 public class PushService {
 
-    public static final String WEBSOCKET_TOPIC_RELE = "/topic/rele";
+    public static final String WEBSOCKET_TOPIC_RELE = "/topic/reles";
     public static final String WEBSOCKET_TOPIC_EQUIPMENT = "/topic/equipments";
     public static final String WEBSOCKET_TOPIC_TEMPERATURES = "/topic/temperatures";
+    public static final String WEBSOCKET_TOPIC_CONDITIONS = "/topic/conditions";
 
     @Autowired
     private SimpMessagingTemplate webSocket;
@@ -27,5 +29,9 @@ public class PushService {
 
     public void send(ReleData rele) {
         webSocket.convertAndSend(WEBSOCKET_TOPIC_RELE, rele);
+    }
+
+    public void send(ConditionData condition) {
+        webSocket.convertAndSend(WEBSOCKET_TOPIC_CONDITIONS, condition);
     }
 }

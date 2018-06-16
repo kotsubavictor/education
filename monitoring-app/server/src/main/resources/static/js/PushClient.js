@@ -5,6 +5,7 @@ var PushClient = function () {
     };
     var temperatureCallback = equipmentCallback;
     var releCallback = equipmentCallback;
+    var conditionCallback = equipmentCallback;
 
     this.connect = function () {
         var socket = new SockJS('/socket');
@@ -22,37 +23,50 @@ var PushClient = function () {
                 temperatureCallback(temperatureSnapshot);
             });
 
-            stompClient.subscribe('/topic/rele', function (response) {
+            stompClient.subscribe('/topic/reles', function (response) {
                 var rele = JSON.parse(response.body);
                 releCallback(rele);
+            });
+
+            stompClient.subscribe('/topic/conditions', function (response) {
+                var condition = JSON.parse(response.body);
+                conditionCallback(condition);
             });
         });
     };
 
-    this.disconnect = function() {
+    this.disconnect = function () {
         if (stompClient !== null) {
             stompClient.disconnect();
         }
         console.log("Disconnected");
     };
 
-    this.subscribeEquipment  = function(tmp) {
+    this.subscribeEquipment = function (tmp) {
         equipmentCallback = tmp;
     };
 
-    this.subscribeTemperature  = function(tmp) {
+    this.subscribeTemperature = function (tmp) {
         temperatureCallback = tmp;
     };
 
-    this.subscribeRele  = function(tmp) {
+    this.subscribeRele = function (tmp) {
         releCallback = tmp;
+    };
+
+    this.subscribeCondition = function (tmp) {
+        conditionCallback = tmp;
     };
 
     this.send = function (path, data) {
         stompClient.send(path, {}, JSON.stringify(data));
     };
-    
+
     this.saveEquipment = function (data) {
         this.send("/app/equipments", data);
-    }
+    };
+
+    this.saveCondition = function (data) {
+        this.send("/app/conditions", data);
+    };
 };

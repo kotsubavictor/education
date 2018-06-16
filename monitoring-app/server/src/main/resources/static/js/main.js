@@ -31,7 +31,7 @@ model.onAdded(function (equipment) {
     chart = new Morris.Line(data);
 
     equipmentTable.append($(
-        "<tr class='" + equipment.name + (equipment.online ? "" : " table-danger") +"'>" +
+        "<tr class='" + equipment.name + (equipment.online ? "" : " table-danger") + "'>" +
         "<td class='name'>" + equipment.name + "</td>" +
         "<td class='online'>" + equipment.online + "</td>" +
         "<td class='temperature'>" + equipment.temperature + "</td>" +
@@ -40,7 +40,7 @@ model.onAdded(function (equipment) {
 });
 
 model.onUpdated(function (equipment) {
-    var tr = equipmentTable.find("tr."+equipment.name);
+    var tr = equipmentTable.find("tr." + equipment.name);
     tr.removeClass();
     tr.addClass(equipment.name);
 
@@ -97,29 +97,37 @@ tempModel.onUpdated(function (records) {
 // Rele: Model
 var reles = {};
 var releTable = $("#rele tbody");
+releTable.on("click", ".action button", function (event) {
+    var action = event.target.className;
+    var data = {
+        name: $(event.target).parents("tr").first().attr("class"),
+        condition: "result = false",
+        manual: false,
+        active: false
+    };
 
-pushClient.subscribeRele(function (rele) {
-    console.log(rele);
-    reles[rele.name] = rele;
+    if (action == "create") {
+        pushClient.saveCondition(data);
+    }
+});
 
-    var tr = releTable.find("tr."+rele.name);
-    if (tr.length == 0){
-        releTable.append($(
-            "<tr class='" + rele.name + "'>" +
-            "<td class='name'>" + rele.name + "</td>" +
-            "<td class='power'>" + rele.power + "</td>" +
-            "</tr>"));
-    } else {
-        tr.removeClass();
-        tr.addClass(rele.name);
+//---------------------------------------------------------------
+// Condition: Model
+var conditionTable = $("#condition tbody");
+conditionTable.on("click", ".action button", function (event) {
+    var action = event.target.className;
+    var tr = $(event.target).parents("tr").first();
+    var condition = {};
 
-        if (rele.power) {
-            tr.addClass("table-success");
-        }
 
-        tr.children().each(function (index, td) {
-            td.innerText = rele[td.className];
-        });
+    if (action == "update") {
+        condition.name = tr.find("td.name").html();
+        condition.condition = tr.find("td.condition textarea").val();
+        condition.manual = tr.find("td.manual input").is(":checked");
+        condition.active = tr.find("td.active input").is(":checked");
+
+        console.log(condition);
+        pushClient.saveCondition(condition);
     }
 });
 
@@ -143,6 +151,83 @@ $.get('/temperatures', function (data) {
     pushClient.subscribeTemperature(function (temperature) {
         console.log(temperature);
         tempModel.update([temperature]);
+    });
+});
+
+$.get('/reles', function (data) {
+    var insertCallback = function (rele) {
+        releTable.append($(
+            "<tr class='" + rele.name + "'>" +
+            "<td class='name'>" + rele.name + "</td>" +
+            "<td class='power'>" + rele.power + "</td>" +
+            "<td class='action'><button class='create'>Create</button></td>" +
+            "</tr>"));
+    };
+
+    var updateCallback = function (rele, tr) {
+        tr.removeClass();
+        tr.addClass(rele.name);
+
+        if (rele.power) {
+            tr.addClass("table-success");
+        }
+
+        tr.children().each(function (index, td) {
+            if (td.className != "action") {
+                td.innerText = rele[td.className];
+            }
+        });
+    };
+
+    data.forEach(insertCallback);
+
+    pushClient.subscribeRele(function (rele) {
+        console.log(rele);
+        reles[rele.name] = rele;
+
+        var tr = releTable.find("tr." + rele.name);
+        if (tr.length == 0) {
+            insertCallback(rele)
+        } else {
+            updateCallback(rele, tr);
+        }
+    });
+});
+
+$.get('/conditions', function (data) {
+    var insertCallback = function (condition) {
+        conditionTable.append($(
+            "<tr class='" + condition.name + "'>" +
+            "<td class='name'>" + condition.name + "</td>" +
+            "<td class='condition'><textarea>" + condition.condition + "</textarea></td>" +
+            "<td class='manual'><input type='checkbox' value='" + condition.manual + "'></td>" +
+            "<td class='active'><input type='checkbox' value='" + condition.active + "'></td>" +
+            "<td class='action'><button class='update'>Update</button></td>" +
+            "</tr>"));
+    };
+
+    var updateCallback = function (condition, tr) {
+        tr.empty();
+        tr.append($(
+            "<td class='name'>" + condition.name + "</td>" +
+            "<td class='condition'><textarea>" + condition.condition + "</textarea></td>" +
+            "<td class='manual'><input type='checkbox' " + (condition.manual ? "checked" : "") + "></td>" +
+            "<td class='active'><input type='checkbox' " + (condition.active ? "checked" : "")  + "></td>" +
+            "<td class='action'><button class='update'>Update</button></td>")
+        );
+    };
+
+    data.forEach(insertCallback);
+
+    pushClient.subscribeCondition(function (condition) {
+        console.log(condition);
+
+        var tr = conditionTable.find("tr." + condition.name);
+        if (tr.length == 0) {
+            insertCallback(condition)
+        } else {
+            updateCallback(condition, tr);
+        }
     });
 });
 
