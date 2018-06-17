@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import server.data.TemperatureSnapshotData;
+import server.data.EquipmentData;
 
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Scope(value = "singleton")
@@ -17,20 +17,24 @@ public class EquipmentOnlineMonitor {
     private EquipmentDataService equipmentService;
 
     @Autowired
-    private SnapshotService snapshotService;
+    private AlertService alertService;
 
-    @Scheduled(fixedRate = 300000)
-    public void tick() {
-        Set<String> onlineEquipment = snapshotService.flush().stream()
-                .map(TemperatureSnapshotData.Temperature::getName).collect(Collectors.toSet());
+    private Set<String> online = ConcurrentHashMap.newKeySet();
 
+    public void record(EquipmentData equipment) {
+        online.add(equipment.getName());
+    }
+
+    @Scheduled(initialDelay = 60000, fixedRate = 60000)
+    public void flush() {
         equipmentService.list().forEach(equipment -> {
-            if (!onlineEquipment.contains(equipment.getName())) {
+            if (!online.contains(equipment.getName())) {
                 equipment.setOnline(false);
                 equipmentService.save(equipment);
+                alertService.validate(equipment);
             }
         });
 
-        snapshotService.clear();
+        online.clear();
     }
 }

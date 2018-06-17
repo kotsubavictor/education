@@ -4,12 +4,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Objects;
+
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
-@Table(name = "COND")
-public class Condition {
-
+@Table(name = "ALERTS")
+public class Alert {
     @Id
     @Column(name = "NAME")
     private String name;
@@ -17,19 +17,15 @@ public class Condition {
     @Column(name = "COND", length = 3000)
     private String condition;
 
-    @Column(name = "MANUAL")
-    private Boolean manual;
-
     @Column(name = "ACTIVE")
     private Boolean active;
 
-    public Condition() {
+    public Alert() {
     }
 
-    public Condition(String name, String condition, Boolean manual, Boolean active) {
+    public Alert(String name, String condition, Boolean active) {
         this.name = name;
         this.condition = condition;
-        this.manual = manual;
         this.active = active;
     }
 
@@ -37,8 +33,8 @@ public class Condition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Condition condition = (Condition) o;
-        return Objects.equals(name, condition.name);
+        Alert alert = (Alert) o;
+        return Objects.equals(name, alert.name);
     }
 
     @Override
@@ -62,14 +58,6 @@ public class Condition {
         this.condition = condition;
     }
 
-    public Boolean getManual() {
-        return manual;
-    }
-
-    public void setManual(Boolean manual) {
-        this.manual = manual;
-    }
-
     public Boolean getActive() {
         return active;
     }
@@ -83,7 +71,6 @@ public class Condition {
         return "Condition{" +
                 "name='" + name + '\'' +
                 ", condition='" + condition + '\'' +
-                ", manual=" + manual +
                 ", active=" + active +
                 '}';
     }

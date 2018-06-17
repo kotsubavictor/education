@@ -86,7 +86,7 @@ public class SonoffSensor {
     }
 
     public Float getTemperature() {
-        Float temperature = 0F;
+        Float temperature = null;
 
         if (am2301 != null) {
             temperature = am2301.getTemperature();
@@ -98,7 +98,7 @@ public class SonoffSensor {
     }
 
     public Float getHumidity() {
-        Float humidity = 0F;
+        Float humidity = null;
 
         if (am2301 != null) {
             humidity = am2301.getHumidity();

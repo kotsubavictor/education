@@ -36,6 +36,7 @@ model.onAdded(function (equipment) {
         "<td class='online'>" + equipment.online + "</td>" +
         "<td class='temperature'>" + equipment.temperature + "</td>" +
         "<td class='humidity'>" + equipment.humidity + "</td>" +
+        "<td class='action'><button class='create'>Create</button></td>" +
         "</tr>"));
 });
 
@@ -53,13 +54,29 @@ model.onUpdated(function (equipment) {
     }
 
     tr.children().each(function (index, td) {
-        td.innerText = equipment[td.className];
+        if (td.className != "action") {
+            td.innerText = equipment[td.className];
+        }
     });
 });
 
 model.onTick(function () {
     chart.setData(model.getRecords());
 });
+
+equipmentTable.on("click", ".action button", function (event) {
+    var action = event.target.className;
+    var data = {
+        name: $(event.target).parents("tr").first().attr("class"),
+        condition: "result.add('Simple alert');",
+        active: false
+    };
+
+    if (action == "create") {
+        pushClient.saveAlert(data);
+    }
+});
+
 
 //---------------------------------------------------------------
 // TemperatureSnapshot: Model + Chart
@@ -132,6 +149,25 @@ conditionTable.on("click", ".action button", function (event) {
 });
 
 //---------------------------------------------------------------
+// Alert: Model
+var alertTable = $("#alert tbody");
+alertTable.on("click", ".action button", function (event) {
+    var action = event.target.className;
+    var tr = $(event.target).parents("tr").first();
+    var alert = {};
+
+
+    if (action == "update") {
+        alert.name = tr.find("td.name").html();
+        alert.condition = tr.find("td.condition textarea").val();
+        alert.active = tr.find("td.active input").is(":checked");
+
+        console.log(alert);
+        pushClient.saveAlert(alert);
+    }
+});
+
+//---------------------------------------------------------------
 // Init PushClient via WebSocket
 $.get('/equipments', function (result) {
     console.log(result);
@@ -200,8 +236,8 @@ $.get('/conditions', function (data) {
             "<tr class='" + condition.name + "'>" +
             "<td class='name'>" + condition.name + "</td>" +
             "<td class='condition'><textarea>" + condition.condition + "</textarea></td>" +
-            "<td class='manual'><input type='checkbox' value='" + condition.manual + "'></td>" +
-            "<td class='active'><input type='checkbox' value='" + condition.active + "'></td>" +
+            "<td class='manual'><input type='checkbox' " + (condition.manual ? "checked" : "") + "></td>" +
+            "<td class='active'><input type='checkbox' " + (condition.active ? "checked" : "") + "></td>" +
             "<td class='action'><button class='update'>Update</button></td>" +
             "</tr>"));
     };
@@ -212,7 +248,7 @@ $.get('/conditions', function (data) {
             "<td class='name'>" + condition.name + "</td>" +
             "<td class='condition'><textarea>" + condition.condition + "</textarea></td>" +
             "<td class='manual'><input type='checkbox' " + (condition.manual ? "checked" : "") + "></td>" +
-            "<td class='active'><input type='checkbox' " + (condition.active ? "checked" : "")  + "></td>" +
+            "<td class='active'><input type='checkbox' " + (condition.active ? "checked" : "") + "></td>" +
             "<td class='action'><button class='update'>Update</button></td>")
         );
     };
@@ -227,6 +263,42 @@ $.get('/conditions', function (data) {
             insertCallback(condition)
         } else {
             updateCallback(condition, tr);
+        }
+    });
+});
+
+
+$.get('/alerts', function (data) {
+    var insertCallback = function (alert) {
+        alertTable.append($(
+            "<tr class='" + alert.name + "'>" +
+            "<td class='name'>" + alert.name + "</td>" +
+            "<td class='condition'><textarea>" + alert.condition + "</textarea></td>" +
+            "<td class='active'><input type='checkbox' "  + (alert.active ? "checked" : "")  +  "></td>" +
+            "<td class='action'><button class='update'>Update</button></td>" +
+            "</tr>"));
+    };
+
+    var updateCallback = function (alert, tr) {
+        tr.empty();
+        tr.append($(
+            "<td class='name'>" + alert.name + "</td>" +
+            "<td class='condition'><textarea>" + alert.condition + "</textarea></td>" +
+            "<td class='active'><input type='checkbox' " + (alert.active ? "checked" : "")  + "></td>" +
+            "<td class='action'><button class='update'>Update</button></td>")
+        );
+    };
+
+    data.forEach(insertCallback);
+
+    pushClient.subscribeAlert(function (alert) {
+        console.log(alert);
+
+        var tr = alertTable.find("tr." + alert.name);
+        if (tr.length == 0) {
+            insertCallback(alert)
+        } else {
+            updateCallback(alert, tr);
         }
     });
 });

@@ -3,10 +3,7 @@ package server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-import server.data.ConditionData;
-import server.data.EquipmentData;
-import server.data.ReleData;
-import server.data.TemperatureSnapshotData;
+import server.data.*;
 
 @Component
 public class PushService {
@@ -15,6 +12,7 @@ public class PushService {
     public static final String WEBSOCKET_TOPIC_EQUIPMENT = "/topic/equipments";
     public static final String WEBSOCKET_TOPIC_TEMPERATURES = "/topic/temperatures";
     public static final String WEBSOCKET_TOPIC_CONDITIONS = "/topic/conditions";
+    public static final String WEBSOCKET_TOPIC_ALERTS = "/topic/alerts";
 
     @Autowired
     private SimpMessagingTemplate webSocket;
@@ -33,5 +31,9 @@ public class PushService {
 
     public void send(ConditionData condition) {
         webSocket.convertAndSend(WEBSOCKET_TOPIC_CONDITIONS, condition);
+    }
+
+    public void send(AlertData alert) {
+        webSocket.convertAndSend(WEBSOCKET_TOPIC_ALERTS, alert);
     }
 }

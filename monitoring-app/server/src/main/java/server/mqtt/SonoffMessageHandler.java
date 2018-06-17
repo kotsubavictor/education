@@ -40,6 +40,9 @@ public class SonoffMessageHandler implements MessageHandler {
     @Autowired
     private SnapshotService snapshotService;
 
+    @Autowired
+    private EquipmentOnlineMonitor onlineMonitor;
+
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
@@ -62,6 +65,7 @@ public class SonoffMessageHandler implements MessageHandler {
             EquipmentData equipment = new EquipmentData(name, true, sensor.getTemperature(), sensor.getHumidity());
             equipmentService.save(equipment);
             snapshotService.record(equipment);
+            onlineMonitor.record(equipment);
             alertService.validate(equipment);
             pushService.send(equipment);
         }

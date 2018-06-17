@@ -39,6 +39,7 @@
                 <th>ONLINE</th>
                 <th>Temperature</th>
                 <th>Humidity</th>
+                <th>Alert</th>
             </tr>
             </thead>
             <tbody>
@@ -75,6 +76,48 @@
             </tbody>
         </table>
     </div>
+    <div>
+        <h1>Alerts</h1>
+        <div>
+            <h3>Available variables</h3>
+            <div>equipment.getName() -> String</div>
+            <div>equipment.getTemperature() -> Float</div>
+            <div>equipment.getOnline() -> Boolean</div>
+            <div>equipment.getHumidity() -> Float</div>
+            <div>result.add('Alert message') -> return variable</div>
+            <div>Example:</div>
+            <div>
+                if (equipment.getTemperature() > 70) {
+                   result.add(equipment.getName() + ": Temperature is too HIGH > 70");
+                }
+
+                if (equipment.getTemperature() < 15) {
+                    result.add(equipment.getName() + ": Temperature is too LOW < 15");
+                }
+
+                if (equipment.getHumidity() > 70) {
+                    result.add(equipment.getName() + ": Humidity is too HIGH > 70");
+                }
+
+                if (!equipment.getOnline()) {
+                    result.add(equipment.getName() + " is OFFLINE");
+                }
+            </div>
+        </div>
+        <table id="alert" class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Condition</th>
+                <th>Active</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
 
     <div>
         <h1>Realtime Temperature</h1>

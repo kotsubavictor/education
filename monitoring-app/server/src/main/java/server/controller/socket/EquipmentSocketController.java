@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import server.data.EquipmentData;
-import server.service.AlertService;
-import server.service.EquipmentDataService;
-import server.service.PushService;
-import server.service.SnapshotService;
+import server.service.*;
 
 @Controller
 public class EquipmentSocketController {
@@ -24,10 +21,14 @@ public class EquipmentSocketController {
     @Autowired
     private SnapshotService snapshotService;
 
+    @Autowired
+    private EquipmentOnlineMonitor onlineMonitor;
+
     @MessageMapping("/equipments")
     public void save(EquipmentData equipment) {
         equipmentService.save(equipment);
         snapshotService.record(equipment);
+        onlineMonitor.record(equipment);
         alertService.validate(equipment);
         pushService.send(equipment);
     }

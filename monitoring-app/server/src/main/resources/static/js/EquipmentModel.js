@@ -67,7 +67,7 @@ var EquipmentModel = function (size) {
                 equipment.lost = 0;
             } else {
                 equipment.lost++;
-                if (equipment.lost == 3) {
+                if (equipment.lost == 4) {
                     equipment.lost = 0;
                     equipment.temperature = 0;
                     equipment.online = false;

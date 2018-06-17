@@ -57,7 +57,7 @@ public class ConditionDataService {
         return conditions;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedRate = 10000)
     public void execute() {
         final Map<String, EquipmentData> equipments = equipmentDataService.list().stream()
                 .collect(Collectors.toMap(EquipmentData::getName, Function.identity()));

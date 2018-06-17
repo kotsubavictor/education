@@ -6,6 +6,7 @@ var PushClient = function () {
     var temperatureCallback = equipmentCallback;
     var releCallback = equipmentCallback;
     var conditionCallback = equipmentCallback;
+    var alertCallback = equipmentCallback;
 
     this.connect = function () {
         var socket = new SockJS('/socket');
@@ -31,6 +32,11 @@ var PushClient = function () {
             stompClient.subscribe('/topic/conditions', function (response) {
                 var condition = JSON.parse(response.body);
                 conditionCallback(condition);
+            });
+
+            stompClient.subscribe('/topic/alerts', function (response) {
+                var alert = JSON.parse(response.body);
+                alertCallback(alert);
             });
         });
     };
@@ -58,6 +64,10 @@ var PushClient = function () {
         conditionCallback = tmp;
     };
 
+    this.subscribeAlert = function (tmp) {
+        alertCallback = tmp;
+    };
+
     this.send = function (path, data) {
         stompClient.send(path, {}, JSON.stringify(data));
     };
@@ -68,5 +78,9 @@ var PushClient = function () {
 
     this.saveCondition = function (data) {
         this.send("/app/conditions", data);
+    };
+
+    this.saveAlert = function (data) {
+        this.send("/app/alerts", data);
     };
 };

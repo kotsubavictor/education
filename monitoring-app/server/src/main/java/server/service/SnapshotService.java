@@ -2,6 +2,7 @@ package server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import server.data.EquipmentData;
 import server.data.TemperatureSnapshotData;
@@ -33,6 +34,7 @@ public class SnapshotService {
         snapshot.add(equipment.getTemperature());
     }
 
+    @Scheduled(initialDelay = 300000, fixedRate = 300000)
     public List<TemperatureSnapshotData.Temperature> flush() {
         final Date date = new Date();
         final Collection<TemperatureSnapshot> data = new LinkedList<>();
