@@ -8,11 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import server.data.AlertData;
-import server.data.ConditionData;
 import server.data.EquipmentData;
-import server.data.ReleData;
 import server.domain.Alert;
-import server.domain.Equipment;
 import server.repository.AlertRepository;
 
 import javax.script.*;
@@ -34,6 +31,9 @@ public class AlertService {
 
     @Autowired
     private AlertRepository alertRepository;
+
+    @Autowired
+    private BashScriptService bashScriptService;
 
     private Map<String, Set<String>> alerts = new ConcurrentHashMap<>();
 
@@ -57,13 +57,19 @@ public class AlertService {
                 SimpleBindings simpleBindings = new SimpleBindings();
                 simpleBindings.put("equipment", equipment);
                 simpleBindings.put("result", messages);
+                Boolean shutdown = Boolean.FALSE;
 
                 try {
                     engine.eval(alert.getCondition(), simpleBindings);
+                    shutdown= (Boolean)((Bindings) simpleBindings.get("nashorn.global")).get("shutdown");
                 } catch (ScriptException e) {
                 }
 
                 sendMessage(equipment, messages);
+                if (shutdown) {
+//                    todo: shutdown a machine
+                    bashScriptService.shutdown(equipment.getName());
+                }
             }
         });
     }

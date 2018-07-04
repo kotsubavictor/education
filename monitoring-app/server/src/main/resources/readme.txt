@@ -48,3 +48,18 @@ Enter keystore password:
  INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:46:58', 'xmrig3', 17.6667, 66, 0);
  INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:46:58', 'xmrig4', 17, 59, 0);
  INSERT INTO server.temperature (snapshot, name, avg, max, min) VALUES ('2018-05-17 12:46:58', 'xmrig1', 17.3333, 60, 0);
+
+USE 32 bit sdk only
+mvn install:install-file -DgroupId=javax.comm -DartifactId=comm -Dversion=3.0-u1  -Dpackaging=jar -Dfile=/home/koviiv/IdeaProjects/education/monitoring-app/server/libraries/comm.jar
+cp libLinuxSerialParallel.so /usr/lib
+Copy the file javax.comm.properties to your <JDK>/jre/lib or your <JRE>/lib directory.
+
+lpinfo -v
+add serial port javax.comm.properties
+sudo apt-get install execstack
+sudo execstack -c libLinuxSerialParallel.so
+ls -l /dev/ttyUSB0
+getent group | grep dia
+useradd -g dialout koviiv
+sudo usermod -a -G dialout koviiv
+groups

@@ -26,6 +26,9 @@ public class EquipmentController {
     @Autowired
     private EquipmentOnlineMonitor onlineMonitor;
 
+    @Autowired
+    private BashScriptService bashScriptService;
+
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public Collection<EquipmentData> list() {
         return equipmentService.list();
@@ -43,6 +46,11 @@ public class EquipmentController {
         onlineMonitor.record(equipment);
         alertService.validate(equipment);
         pushService.send(equipment);
+    }
+
+    @RequestMapping(value = "/{name}/shutdown", method = RequestMethod.GET, produces = "application/json")
+    public void shutdown(@PathVariable String name) {
+        bashScriptService.shutdown(name);
     }
 
 }

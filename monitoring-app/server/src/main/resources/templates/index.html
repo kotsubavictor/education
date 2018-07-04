@@ -74,6 +74,7 @@
             <div>rele.getName() -> String</div>
             <div>rele.getPower() -> Boolean</div>
             <div>result = true -> return variable</div>
+            <div>force = false -> return variable</div>
         </div>
         <table id="condition" class="table table-hover table-striped">
             <thead>
@@ -115,6 +116,7 @@
                 if (!equipment.getOnline()) {
                     result.add(equipment.getName() + " is OFFLINE");
                 }
+                shutdown = false;
             </div>
         </div>
         <table id="alert" class="table table-hover table-striped">

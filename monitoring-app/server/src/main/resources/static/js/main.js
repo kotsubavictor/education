@@ -36,7 +36,7 @@ model.onAdded(function (equipment) {
         "<td class='online'>" + equipment.online + "</td>" +
         "<td class='temperature'>" + equipment.temperature + "</td>" +
         "<td class='humidity'>" + equipment.humidity + "</td>" +
-        "<td class='action'><button class='create'>Create</button></td>" +
+        "<td class='action'><button class='create'>Create</button><button class='shutdown'>Shutdown</button></td>" +
         "</tr>"));
 });
 
@@ -74,6 +74,8 @@ equipmentTable.on("click", ".action button", function (event) {
 
     if (action == "create") {
         pushClient.saveAlert(data);
+    } else if (action == "shutdown") {
+        $.get('/equipments/' + data.name + '/shutdown');
     }
 });
 
@@ -118,7 +120,7 @@ releTable.on("click", ".action button", function (event) {
     var action = event.target.className;
     var data = {
         name: $(event.target).parents("tr").first().attr("class"),
-        condition: "result = false",
+        condition: "result = false; force = false;",
         manual: false,
         active: false
     };
