@@ -43,7 +43,7 @@ public class ConditionDataService {
     private AirConditionerService airConditionerService;
 
     @Autowired
-    @Qualifier("mqtt_outbound_channel")
+    @Qualifier("mqttOutboundChannel")
     private MessageChannel messageChannel;
 
     @Value("${cond.id}")

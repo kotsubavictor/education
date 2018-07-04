@@ -65,7 +65,7 @@ public class MQTTConfig {
     }
 
     @Bean
-    @Qualifier("mqtt_outbound_channel")
+    @Qualifier("mqttOutboundChannel")
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
