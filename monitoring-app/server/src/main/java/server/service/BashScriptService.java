@@ -3,6 +3,9 @@ package server.service;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +16,13 @@ import java.io.IOException;
 @Component
 public class BashScriptService {
 
+    private final Logger logger = LoggerFactory.getLogger(BashScriptService.class);
+
     @Value("${script.dir}")
     private String scriptDir;
+
+    @Autowired
+    private AlertService alertService;
 
     public void shutdown(String name) {
         try {
@@ -24,11 +32,9 @@ public class BashScriptService {
             DefaultExecutor exec = new DefaultExecutor();
             exec.setStreamHandler(streamHandler);
             exec.execute(commandLine);
-//        todo: log results
-            System.out.println("-----------------\n shutdown machine:" + name);
-            System.out.println(outputStream);
         } catch (IOException e) {
-            System.out.println(e);
+            alertService.sendMessage("Could not shutdown machine: " + name);
+            logger.error("Could not shutdown machine: " + name, e);
         }
     }
 }

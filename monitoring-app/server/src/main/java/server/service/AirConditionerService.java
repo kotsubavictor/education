@@ -4,6 +4,8 @@ import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -13,10 +15,13 @@ import server.data.EquipmentData;
 import server.data.ReleData;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 @Scope(value = "singleton")
 public class AirConditionerService {
+
+    private final Logger logger = LoggerFactory.getLogger(AirConditionerService.class);
 
     private static final String COMMAND_STATUS = "Received";
 
@@ -38,6 +43,8 @@ public class AirConditionerService {
     @Autowired
     private EquipmentOnlineMonitor onlineMonitor;
 
+    private AtomicBoolean isReseting = new AtomicBoolean(false);
+
 
     @Value("${cond.id}")
     private String condId;
@@ -48,26 +55,20 @@ public class AirConditionerService {
     private ReleData rele;
 
     @PostConstruct
-    public void init() {
+    public void init() throws SerialPortException {
         serialPort = new SerialPort(portId);
-        try {
-            serialPort.openPort();
-            serialPort.setParams(SerialPort.BAUDRATE_9600,
-                    SerialPort.DATABITS_8,
-                    SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE);
-            serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN |
-                    SerialPort.FLOWCONTROL_RTSCTS_OUT);
-            serialPort.addEventListener(new PortReader(), SerialPort.MASK_RXCHAR);
-            rele = new ReleData(condId, false);
-            releDataService.save(rele);
-            pushService.send(rele);
-            power(false);
-        }
-        catch (SerialPortException ex) {
-            System.out.println(ex);
-//            todo : send email that serial not working
-        }
+        serialPort.openPort();
+        serialPort.setParams(SerialPort.BAUDRATE_9600,
+                SerialPort.DATABITS_8,
+                SerialPort.STOPBITS_1,
+                SerialPort.PARITY_NONE);
+        serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN |
+                SerialPort.FLOWCONTROL_RTSCTS_OUT);
+        serialPort.addEventListener(new PortReader(), SerialPort.MASK_RXCHAR);
+        rele = new ReleData(condId, false);
+        releDataService.save(rele);
+        pushService.send(rele);
+        power(false);
     }
 
     public void power(Boolean state) {
@@ -77,14 +78,16 @@ public class AirConditionerService {
             releDataService.save(rele);
             pushService.send(rele);
         } catch (SerialPortException ex) {
-//            todo : send email that serial not working
+            logger.error("Could not write to serial port", ex);
+            alertService.sendMessage("Serial port is down:\n" + ex);
+            reset();
         }
     }
 
     private class PortReader implements SerialPortEventListener {
 
         public void serialEvent(SerialPortEvent event) {
-            if(event.isRXCHAR() && event.getEventValue() > 0){
+            if (event.isRXCHAR() && event.getEventValue() > 0) {
                 try {
                     String data = serialPort.readString(event.getEventValue());
                     String[] commands = data.split("\n");
@@ -99,11 +102,40 @@ public class AirConditionerService {
                             pushService.send(equipment);
                         }
                     }
+                } catch (SerialPortException e) {
+                    logger.error("Could not read from serial port", e);
+                    alertService.sendMessage("Serial port is down:\n" + e);
+                    reset();
+                } catch (Exception e) {
+                    logger.error("Could not read from serial port", e);
                 }
-                catch (Exception ex) {
-                    //            todo : send email that serial not working
-                    System.out.println(ex);
-                }
+            }
+        }
+    }
+
+    public void destroy() throws SerialPortException {
+        if (serialPort != null) {
+            serialPort.closePort();
+            serialPort = null;
+        }
+    }
+
+    public void reset() {
+        if (isReseting.get()) {
+            return;
+        }
+
+        isReseting.set(true);
+
+        while (isReseting.get()){
+            try {
+                Thread.sleep(60000);
+                destroy();
+                init();
+                isReseting.set(false);
+                alertService.sendMessage("Serial port is up.");
+            } catch (SerialPortException | InterruptedException e) {
+                logger.error("Could not re-initialize serial port", e);
             }
         }
     }

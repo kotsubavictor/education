@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Scope(value = "singleton")
 public class AlertService {
-    private static final String ALERT_MESSAGE = "ALERT - TEMPERATURE";
+    private static final String ALERT_MESSAGE = "ALERT - EQUIPMENT";
 
     private static ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
 
@@ -67,11 +67,18 @@ public class AlertService {
 
                 sendMessage(equipment, messages);
                 if (shutdown) {
-//                    todo: shutdown a machine
                     bashScriptService.shutdown(equipment.getName());
                 }
             }
         });
+    }
+
+    public void sendMessage(String data) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(mailTo);
+        message.setSubject(ALERT_MESSAGE);
+        message.setText(data);
+        emailSender.send(message);
     }
 
     @Scheduled(initialDelay = 60000, fixedRate = 300000)
@@ -104,11 +111,7 @@ public class AlertService {
         if (notification.length() > 0) {
             notification.append('\n');
             notification.append(equipment.toString());
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(mailTo);
-            message.setSubject(ALERT_MESSAGE);
-            message.setText(notification.toString());
-            emailSender.send(message);
+            sendMessage(notification.toString());
         }
     }
 }

@@ -28,7 +28,6 @@ public class ReleController {
 
     @RequestMapping(value = "/{name}/{state}", method = RequestMethod.GET, produces = "application/json")
     public void test(@PathVariable String name, @PathVariable Boolean state) {
-//        todo: remove later
         conditionDataService.power(name, state);
     }
 
