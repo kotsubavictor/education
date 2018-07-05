@@ -305,4 +305,21 @@ $.get('/alerts', function (data) {
     });
 });
 
+$.get('/accounts', function (data) {
+    var accountTable = $("#account tbody");
+
+    var insertCallback = function (account) {
+        accountTable.append($(
+            "<tr>" +
+            "<td class='date'>" + new Date(account.date).toLocaleString() + "</td>" +
+            "<td class='np'>" + account.npAmount + "</td>" +
+            "<td class='sx'>" + account.sxAmount + "</td>" +
+            "<td class='delta'>" + (account.npAmount - account.sxAmount) + "</td>"+
+            "</tr>"));
+    };
+
+    data.forEach(insertCallback);
+});
+
+
 pushClient.connect();
