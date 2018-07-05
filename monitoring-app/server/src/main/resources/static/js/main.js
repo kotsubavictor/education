@@ -67,7 +67,7 @@ model.onTick(function () {
 equipmentTable.on("click", ".action button", function (event) {
     var action = event.target.className;
     var data = {
-        name: $(event.target).parents("tr").first().attr("class"),
+        name: $(event.target).parents("tr").first().children("td.name").html(),
         condition: "result.add('Simple alert');",
         active: false
     };
@@ -119,7 +119,7 @@ var releTable = $("#rele tbody");
 releTable.on("click", ".action button", function (event) {
     var action = event.target.className;
     var data = {
-        name: $(event.target).parents("tr").first().attr("class"),
+        name: $(event.target).parents("tr").first().children("td.name").html(),
         condition: "result = false; force = false;",
         manual: false,
         active: false

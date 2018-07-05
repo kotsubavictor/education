@@ -3,6 +3,8 @@ package server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
@@ -25,6 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
+@Scope(value = BeanDefinition.SCOPE_SINGLETON)
 public class ConditionDataService {
 
     private static final String MQTT_RELE_POWER_ON = "ON";

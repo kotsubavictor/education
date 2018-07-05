@@ -103,11 +103,11 @@ public class AirConditionerService {
                         }
                     }
                 } catch (SerialPortException e) {
-                    logger.error("Could not read from serial port", e);
+                    logger.error("Could not read from serial port 1", e);
                     alertService.sendMessage("Serial port is down:\n" + e);
                     reset();
                 } catch (Exception e) {
-                    logger.error("Could not read from serial port", e);
+                    logger.error("Could not read from serial port 2", e);
                 }
             }
         }
