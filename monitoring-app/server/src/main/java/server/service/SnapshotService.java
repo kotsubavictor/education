@@ -66,10 +66,7 @@ public class SnapshotService {
         } else {
             temperatures = Collections.emptyList();
         }
-        return temperatures;
-    }
-
-    public void clear() {
         snapshots.clear();
+        return temperatures;
     }
 }
