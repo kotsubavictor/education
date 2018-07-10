@@ -9,15 +9,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import server.data.AlertData;
 import server.data.EquipmentData;
+import server.data.ReleData;
 import server.domain.Alert;
 import server.repository.AlertRepository;
 
 import javax.script.*;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Component
 @Scope(value = "singleton")
@@ -26,14 +29,25 @@ public class AlertService {
 
     private static ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
 
+    private LocalDateTime offTime;
+
     @Value("${server.mail.to}")
     private String mailTo;
+
+    @Value("${server.url}")
+    private String serverUrl;
 
     @Autowired
     private AlertRepository alertRepository;
 
     @Autowired
     private BashScriptService bashScriptService;
+
+    @Autowired
+    private EquipmentDataService equipmentDataService;
+
+    @Autowired
+    private ReleDataService releDataService;
 
     private Map<String, Set<String>> alerts = new ConcurrentHashMap<>();
 
@@ -113,5 +127,49 @@ public class AlertService {
             notification.append(equipment.toString());
             sendMessage(notification.toString());
         }
+    }
+
+    @Scheduled(initialDelay = 60000, fixedDelay = 60000)
+    private void checkAccess() {
+        if (hasAccessToServer()) {
+            offTime = null;
+        } else {
+            if (offTime == null) {
+                offTime = LocalDateTime.now();
+            }
+
+            if (offTime.isBefore(LocalDateTime.now().minusMinutes(5))) {
+                Set<String> reles = releDataService.list().stream().map(ReleData::getName).collect(Collectors.toSet());
+                for (EquipmentData equipment : equipmentDataService.list()) {
+                    if (equipment.getOnline() && !reles.contains(equipment.getName())) {
+                        bashScriptService.shutdown(equipment.getName());
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean hasAccessToServer() {
+        boolean isOnline = false;
+        InetAddress[] addresses;
+        try {
+            addresses = InetAddress.getAllByName(serverUrl);
+        } catch (UnknownHostException ex) {
+            return isOnline;
+        }
+
+        for (InetAddress address : addresses) {
+            try {
+                isOnline = address.isReachable(2000);
+            } catch (IOException e) {
+                isOnline = false;
+            }
+
+            if (isOnline) {
+                break;
+            }
+        }
+
+        return isOnline;
     }
 }
