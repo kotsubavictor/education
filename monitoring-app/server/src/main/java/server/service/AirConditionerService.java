@@ -7,8 +7,10 @@ import jssc.SerialPortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import server.data.EquipmentData;
@@ -43,8 +45,11 @@ public class AirConditionerService {
     @Autowired
     private EquipmentOnlineMonitor onlineMonitor;
 
-    private AtomicBoolean isReseting = new AtomicBoolean(false);
+    @Autowired
+    @Qualifier("application_pool")
+    private TaskExecutor taskExecutor;
 
+    private AtomicBoolean isReseting = new AtomicBoolean(false);
 
     @Value("${cond.id}")
     private String condId;
@@ -54,7 +59,6 @@ public class AirConditionerService {
     private SerialPort serialPort;
     private ReleData rele;
 
-    @PostConstruct
     public void init() throws SerialPortException {
         serialPort = new SerialPort(portId);
         serialPort.openPort();
@@ -114,29 +118,32 @@ public class AirConditionerService {
     }
 
     public void destroy() throws SerialPortException {
-        if (serialPort != null) {
+        if (serialPort != null && serialPort.isOpened()) {
             serialPort.closePort();
             serialPort = null;
         }
     }
 
+    @PostConstruct
     public void reset() {
-        if (isReseting.get()) {
-            return;
-        }
-
-        isReseting.set(true);
-
-        while (isReseting.get()){
-            try {
-                Thread.sleep(60000);
-                destroy();
-                init();
-                isReseting.set(false);
-                alertService.sendMessage("Serial port is up.");
-            } catch (SerialPortException | InterruptedException e) {
-                logger.error("Could not re-initialize serial port", e);
+        taskExecutor.execute(() -> {
+            if (isReseting.get()) {
+                return;
             }
-        }
+
+            isReseting.set(true);
+
+            while (isReseting.get()){
+                try {
+                    Thread.sleep(60000);
+                    destroy();
+                    init();
+                    isReseting.set(false);
+                    alertService.sendMessage("Serial port is up.");
+                } catch (SerialPortException | InterruptedException e) {
+                    logger.error("Could not re-initialize serial port", e);
+                }
+            }
+        });
     }
 }
