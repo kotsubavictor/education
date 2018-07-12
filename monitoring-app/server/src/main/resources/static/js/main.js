@@ -96,31 +96,46 @@ equipmentTable.on("click", ".action button", function (event) {
 var tempChart = null;
 var tempModel = new TemperatureModel(288);
 
-tempModel.onAdded(function (records) {
-    var names = tempModel.getEquipmentNames();
-    var data = {
-        element: 'delay_chart',
-        data: records,
-        xkey: 'timing',
-        ykeys: names,
-        labels: names,
-        pointSize: 0,
-        ymin: 15,
-        ymax: 90,
-        xLabels: '5sec',
-        goals: [70, 75],
-        goalLineColors: ['#FFFF00', '#ff0000'],
-        goalStrokeWidth: 4,
-        eventStrokeWidth: 1,
-        hideHover: 'auto'
-    };
+var tempChartButton = $("#delay_chart_button");
+var tempChartElement = $("#delay_chart");
+var tmpRecords= [];
 
-    $("#delay_chart").html('');
-    tempChart = new Morris.Line(data);
+tempChartButton.click(function () {
+    if(tempChart) {
+        tempChart = null;
+        tempChartElement.html('');
+    } else {
+        var names = tempModel.getEquipmentNames();
+        var data = {
+            element: 'delay_chart',
+            data: tmpRecords,
+            xkey: 'timing',
+            ykeys: names,
+            labels: names,
+            pointSize: 0,
+            ymin: 15,
+            ymax: 90,
+            xLabels: '5min',
+            goals: [70, 75],
+            goalLineColors: ['#FFFF00', '#ff0000'],
+            goalStrokeWidth: 4,
+            eventStrokeWidth: 1,
+            hideHover: 'auto'
+        };
+        tempChart = new Morris.Line(data);
+    }
+});
+
+
+tempModel.onAdded(function (records) {
+    tmpRecords = records;
 });
 
 tempModel.onUpdated(function (records) {
-    tempChart.setData(records);
+    tmpRecords = records;
+    if (tempChart) {
+        tempChart.setData(records);
+    }
 });
 
 //---------------------------------------------------------------
