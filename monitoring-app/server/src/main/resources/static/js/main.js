@@ -8,28 +8,37 @@ var chart = null;
 var model = new EquipmentModel(200);
 var equipmentTable = $("#equipment tbody");
 
+var chartButton = $("#rt_chart_button");
+var chartElement = $("#rt_chart");
+
+chartButton.click(function () {
+    if (chart) {
+        chart = null;
+        chartElement.html("");
+    } else {
+        var names = model.getEquipmentNames();
+        var data = {
+            element: 'rt_chart',
+            data: model.getRecords(),
+            xkey: 'timing',
+            ykeys: names,
+            labels: names,
+            pointSize: 0,
+            ymin: 15,
+            ymax: 90,
+            xLabels: '5sec',
+            goals: [70, 75],
+            goalLineColors: ['#FFFF00', '#ff0000'],
+            goalStrokeWidth: 4,
+            eventStrokeWidth: 1,
+            hideHover: 'auto'
+        };
+
+        chart = new Morris.Line(data);
+    }
+});
+
 model.onAdded(function (equipment) {
-    var names = model.getEquipmentNames();
-    var data = {
-        element: 'rt_chart',
-        data: model.getRecords(),
-        xkey: 'timing',
-        ykeys: names,
-        labels: names,
-        pointSize: 0,
-        ymin: 15,
-        ymax: 90,
-        xLabels: '5sec',
-        goals: [70, 75],
-        goalLineColors: ['#FFFF00', '#ff0000'],
-        goalStrokeWidth: 4,
-        eventStrokeWidth: 1,
-        hideHover: 'auto'
-    };
-
-    $("#rt_chart").html('');
-    chart = new Morris.Line(data);
-
     equipmentTable.append($(
         "<tr class='" + equipment.name + (equipment.online ? "" : " table-danger") + "'>" +
         "<td class='name'>" + equipment.name + "</td>" +
@@ -61,7 +70,9 @@ model.onUpdated(function (equipment) {
 });
 
 model.onTick(function () {
-    chart.setData(model.getRecords());
+    if (chart) {
+        chart.setData(model.getRecords());
+    }
 });
 
 equipmentTable.on("click", ".action button", function (event) {
